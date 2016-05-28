@@ -1,0 +1,58 @@
+%!TEX root = ../document.tex
+\usepackage[automark]{scrlayer-scrpage}
+\usepackage{marginnote}
+\usepackage{ragged2e}
+
+
+\definecolor{ResponseGray}{gray}{0.4}
+\definecolor{ResponseDarkGray}{gray}{0.25}
+\definecolor{ResponseOrange}{HTML}{FF9900}
+
+
+\pagestyle{headings}
+\usepackage{layout}
+\setkomafont{pageheadfoot}{\normalfont\sffamily\color{black}}
+\setkomafont{pagenumber}{\normalfont\sffamily\color{black}}
+
+
+\newlength{\pageNumberHeaderSkip}
+\setlength{\pageNumberHeaderSkip}{-\paperwidth+\textwidth+\hoffset+1in+\oddsidemargin-20pt}
+\newlength{\chapterHeaderSkip}
+\setlength{\chapterHeaderSkip}{\pageNumberHeaderSkip+3em+20pt}%
+
+\ohead{\smash{\textcolor{THIblue}{\rule[-4pt]{2pt}{\voffset+\topmargin+\headheight+1in}}}\makebox[35pt][c]{\oldstylenums\pagemark}\hspace{\pageNumberHeaderSkip}}
+\chead{}
+\ihead{\raggedleft{\headmark} \hspace{\chapterHeaderSkip}}
+\cfoot{}
+\ofoot{}
+\ifoot{}
+
+\renewcommand*{\sectionformat}{\makebox[0pt][r]{\thesection\autodot\enskip}}
+\renewcommand*{\subsectionformat}{\makebox[0pt][r]{\thesubsection\autodot\enskip}}
+
+
+% \addtokomafont{chapter}{\color{THIblue}}
+% \addtokomafont{sectioning}{\color{THIblue}}
+% \addtokomafont{caption}{\color{THIblue}}
+
+% \KOMAoption{chapterprefix}{true}
+% \renewcommand{\chaptermarkformat}{\chapappifchapterprefix{\ }\thechapter\autodot\enskip}
+
+% \renewcommand*\raggedchapter{\centering}
+% \RedeclareSectionCommand[beforeskip=0pt,afterskip=8\baselineskip]{chapter}
+% \setkomafont{chapterprefix}{\normalsize\mdseries}
+
+% \renewcommand*{\chapterformat}{%
+%   \chapappifchapterprefix{\nobreakspace}\thechapter\autodot%
+%   \IfUsePrefixLine{%
+%     \par\nobreak\vspace*{-\parskip}\vspace*{-.6\baselineskip}%
+%     \rule{0.9\textwidth}{2pt}%
+%   }{\enskip}%
+% }
+
+% \renewcommand\chapterlineswithprefixformat[3]{%
+%   \MakeUppercase{#2#3}
+% }
+
+% \renewcommand{\appendixpagename}{\Huge\color{THIblue} \MakeUppercase{\textsf{Anhang}}}
+

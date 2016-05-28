@@ -1,0 +1,1277 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"cy",
+				"cyclomaticComplexity"
+			],
+			[
+				"us",
+				"usepackage"
+			],
+			[
+				"Date",
+				"Datenhaltung"
+			],
+			[
+				"isol",
+				"isolation=\"serializable\"	isolation"
+			],
+			[
+				"out",
+				"output=\"false\"	output"
+			],
+			[
+				"returnty",
+				"returntype=\"any\"	returntype"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "document.tex",
+			"settings":
+			{
+				"buffer_size": 5832,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/bachelorarbeit/conf/svnserve.conf",
+			"settings":
+			{
+				"buffer_size": 3985,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/bachelorarbeit/conf/passwd",
+			"settings":
+			{
+				"buffer_size": 422,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "chapter/title.tex",
+			"settings":
+			{
+				"buffer_size": 1066,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/Users/Stefan/Downloads/Latex-template-ISCA-manuscript.tex",
+			"settings":
+			{
+				"buffer_size": 3181,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "chapter/first_pages.tex",
+			"settings":
+			{
+				"buffer_size": 1951,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "config/document.tex",
+			"settings":
+			{
+				"buffer_size": 898,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "config/pagestyle.tex",
+			"settings":
+			{
+				"buffer_size": 1179,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Package Control Messages\n========================\n\nLaTeXing:\n--------\n\n  LaTeXing 1.2.15\n  ===============\n  \n  Improved\n  --------\n  \n  - Further performance enhancements\n  \n  \n  Fixed\n  -----\n  \n  - Generation of chapter/section label\n  \n  - Performance issue while keyboard listener\n  ",
+			"settings":
+			{
+				"buffer_size": 288,
+				"line_ending": "Windows",
+				"name": "Package Control Messages",
+				"scratch": true
+			}
+		},
+		{
+			"file": "resource/ideas.txt",
+			"settings":
+			{
+				"buffer_size": 663,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "config/graphics.tex",
+			"settings":
+			{
+				"buffer_size": 339,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 400.0,
+		"last_filter": "dele",
+		"selected_items":
+		[
+			[
+				"dele",
+				"File: Delete"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"recon",
+				"LaTeXTools: Reconfigure and migrate settings"
+			],
+			[
+				"disable",
+				"Package Control: Disable Package"
+			],
+			[
+				"settings",
+				"Preferences: Settings - Default"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"enable",
+				"LiveReload: Enable/disable plug-ins"
+			],
+			[
+				"live",
+				"LiveReload: Enable/disable plug-ins"
+			],
+			[
+				"rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"lst",
+				"Package Control: List Packages"
+			]
+		],
+		"width": 408.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document",
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document/chapter",
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document/config",
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document/resource",
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document/resource/code"
+	],
+	"file_history":
+	[
+		"/C/repositories/conf/pass.conf",
+		"/C/repositories/conf/svnserve.conf",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/hinweise.txt",
+		"/C/Users/Stefan/Desktop/Semester VI/JBSA/ProContra.txt",
+		"/C/Users/Stefan/AppData/Local/Microsoft/Windows/INetCache/IE/3GK0UACC/main.1000074.com.nekki.shadowfight[1].obb",
+		"/C/Users/Stefan/Desktop/journal",
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document/chapter/title.tex",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/LaTeXTools.sublime-settings",
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document/config/document.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document/config/graphics.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document/test.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document/chapter/first_pages.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document/config/glossaries.tex",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/LaTeXTools/README.markdown",
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document/chapter/abstract.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Bachelorarbeit/document/bachelorarbeit.sublime-project",
+		"/C/Users/Stefan/Desktop/Dokumente/buecher/Morgan, Richard - Gefallene Engel.txt",
+		"/C/Users/Stefan/Desktop/Dokumente/buecher/Morgan, Richard - Skorpion.txt",
+		"/C/Users/Stefan/Desktop/Dokumente/buecher/Morgan, Richard - Profit.txt",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/LaTeXTools/LaTeX.sublime-build",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/chapter/abstract.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/config/glossaries.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/config/development.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/config/listings.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/config/references.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/document.pdf",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/document.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/latex/cat_class_node.tex",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/config/document.tex",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/chapter/jqassistant.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/latex/cat_method.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/latex/cat_attribute.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/document.out",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/document.toc",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/chapter/analysis.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/chapter/codequality.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/seminararbeit neo4j.sublime-project",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/document.aux",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/document.log",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/code/cypher/spring_controller.cypher",
+		"/C/Users/Stefan/OneDrive/Dokumente/notes/krypto.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/config/pagestyle.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/code/cypher/method_call_direct.cypher",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/chapter/neo4j.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/config/graphics.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/latex/maven.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/resources/script/maven.ps1",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/chapter/acknowledgement.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/latex/multiple_nodes.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/latex/single_node.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/chapter/declaration.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/chapter/last_pages.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/chapter/first_pages.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/latex/cover.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/latex/process.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/chapter/introduction.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/latex/attend_class_nodes.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/config/tabular.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/image/students_class_nodes.pdf_tex",
+		"/C/Users/Stefan/Desktop/bachelorarbeit.TXT",
+		"/C/Users/Stefan/Documents/2dgame/src/main.lua",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/chapter/title.tex",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/config/math.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/code/cypher/cat_with_attribute.cypher",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/code/cypher/cat_with_method.cypher",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/reference/references.bib",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/document.bbl",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/config/tabular.fls",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/code/java/Cat.java",
+		"/C/Users/Stefan/Downloads/result (1).json",
+		"/C/Users/Stefan/Downloads/Add_Current_Folder_to_Path_Variable/AddPathEntries.reg",
+		"/C/Users/Stefan/Downloads/Add_Current_Folder_to_Path_Variable/RemovePathEntries.reg",
+		"/C/Users/Stefan/Desktop/Activate-WLAN.ps1",
+		"/C/Users/Stefan/Downloads/wlan-138_01.06.15_2047.eth",
+		"/C/Users/Stefan/Downloads/com.embarcadero.Projekt_HI_App_/classes.dex",
+		"/C/Users/Stefan/Downloads/com.embarcadero.Projekt_HI_App_/META-INF/MANIFEST.MF",
+		"/C/Users/Stefan/Downloads/com.embarcadero.Projekt_HI_App_/lib/x86/libProjekt_HI_App_.so",
+		"/C/Users/Stefan/Downloads/com.embarcadero.Projekt_HI_App_/resources.arsc",
+		"/C/Users/Stefan/Downloads/com.embarcadero.Projekt_HI_App_/AndroidManifest.xml",
+		"/C/Users/Stefan/Downloads/com.embarcadero.Projekt_HI_App_/assets/internal/Stpl_Data.s3db",
+		"/C/Users/Stefan/Downloads/com.embarcadero.Projekt_HI_App_/assets/deployinfo/deployedassets.txt",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/code/cypher/students_class_nodes.cypher",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/code/cypher/physics_node.cypher",
+		"/C/Users/Stefan/Downloads/graph (1).svg",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/code/cypher/student_nodes.cypher",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/code/cypher/all_nodes.cypher",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/latex/single_node.fls",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/code/java/HelloWorld.java",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/config/document.aux",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/document.fls",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit_neo4j/document/resource/image/deckblatt.pdf_tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/chapter/title.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/config/document.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/chapter/neo4j.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/resource/reference/references.bib",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/chapter/jqassistant.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/chapter/abstract.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/chapter/analysis.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/chapter/introduction.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/config/pagestyle.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/config/development.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/chapter/title.aux",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/config/graphics.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/config/math.tex",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/config/references.tex",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/LaTeX.sublime-settings",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/JSON.sublime-settings",
+		"/C/Users/Stefan/OneDrive/Dokumente/Seminararbeit neo4j/document/document.tex",
+		"/C/ProgramData/chocolatey/lib/sumatrapdf.commandline/tools/SumatraPDF-settings.txt",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/LaTeXing.sublime-settings",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/LaTeXing/LaTeXing.sublime-settings",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/LaTeXing/LaTeX.sublime-build",
+		"/C/Users/Stefan/Downloads/fritzbox-vcc0_22.05.15_1157.eth",
+		"/C/Users/Stefan/Downloads/wlan-128_22.05.15_1156.eth",
+		"/C/Users/Stefan/Desktop/Vorschlag THI Vorlage/Vorschlag_THI_Vorlage_Abschlussarbeit_2015.tex",
+		"/C/Users/Stefan/Desktop/response/ingolstadt-webservice/Application.cfc",
+		"/C/Users/Stefan/Desktop/response/ingolstadt-webservice/model/authentication/UserRepository.cfc",
+		"/C/Users/Stefan/OneDrive/Dokumente/Presse/Edit/150420 Damen II - München Freimann.txt",
+		"/C/Users/Stefan/Documents/luaworkspace/shadertest/main.lua",
+		"/C/Users/Stefan/OneDrive/Dokumente/Presse/Eingang/150420 Damen II - München Freimann.txt",
+		"/C/Users/Stefan/Downloads/fritzbox-vcc0_10.05.15_1504.eth",
+		"/C/Users/Stefan/Downloads/fritzbox-vcc0_10.05.15_1508.eth",
+		"/C/inetpub/wwwroot/X3DOM-Beispiel.html",
+		"/C/Users/Stefan/AppData/Local/Microsoft/Office/15.0/Lync/sip_stefan.braun@response.local/EndpointConfiguration.cache"
+	],
+	"find":
+	{
+		"height": 36.0
+	},
+	"find_in_files":
+	{
+		"height": 105.0,
+		"where_history":
+		[
+			"*.tex",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"10",
+			"7",
+			"textsf",
+			"des we",
+			"xcolor",
+			"{\n",
+			"klitoris",
+			"schwanz",
+			"titt",
+			"möse",
+			"brüste",
+			"stöhn",
+			"eier",
+			"hoden",
+			"schwanz",
+			"leck",
+			"sex",
+			"vögel",
+			"dass",
+			"sex",
+			"vögel",
+			"brust",
+			"tabular",
+			"ref",
+			"label",
+			"input",
+			"includecode",
+			"input",
+			"_",
+			"aux",
+			"label",
+			"  ",
+			"    ",
+			"line width=2mm, draw=black!50, blur shadow",
+			"spell",
+			"lstinline",
+			"listinline",
+			"folgende",
+			"WITH",
+			"  ",
+			"encoding",
+			"texmk",
+			"fds",
+			"Mahler.2015",
+			"thi_logo_cro",
+			"cite",
+			"InverseSearchCmdLine",
+			"white"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"",
+			"\\t"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 5,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "document.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5832,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								308,
+								308
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/Theme - itg.flat/itg.Monokai.tmTheme",
+							"spell_check": true,
+							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/bachelorarbeit/conf/svnserve.conf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3985,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2437,
+								2437
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 570.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/bachelorarbeit/conf/passwd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 422,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								422,
+								422
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "chapter/title.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1066,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								513,
+								513
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/Theme - itg.flat/itg.Monokai.tmTheme",
+							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 228.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/Users/Stefan/Downloads/Latex-template-ISCA-manuscript.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3181,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2780,
+								2780
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LaTeX/LaTeX.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 741.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "chapter/first_pages.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1951,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								153,
+								153
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/Theme - itg.flat/itg.Monokai.tmTheme",
+							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "config/document.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 898,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								701,
+								701
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/Theme - itg.flat/itg.Monokai.tmTheme",
+							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 285.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "config/pagestyle.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1179,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								394,
+								394
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/Theme - itg.flat/itg.Monokai.tmTheme",
+							"syntax": "Packages/LaTeX/LaTeX.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 288,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								288,
+								288
+							]
+						],
+						"settings":
+						{
+							"auto_indent": false,
+							"default_dir": "C:\\Users\\Stefan\\OneDrive\\Dokumente\\Bachelorarbeit\\document",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "resource/ideas.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 663,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								564,
+								663
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "config/graphics.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 339,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								185,
+								185
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/Theme - itg.flat/itg.Monokai.tmTheme",
+							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 31.0
+	},
+	"input":
+	{
+		"height": 38.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 197.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/LaTeXTools/LaTeX.sublime-build",
+	"project": "bachelorarbeit.sublime-project",
+	"replace":
+	{
+		"height": 58.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"page",
+				"config\\pagestyle.tex"
+			],
+			[
+				"fi",
+				"chapter\\first_pages.tex"
+			],
+			[
+				"title",
+				"chapter\\title.tex"
+			],
+			[
+				"grap",
+				"config\\graphics.tex"
+			],
+			[
+				"document",
+				"document\\document.tex"
+			],
+			[
+				"gra",
+				"document\\config\\graphics.tex"
+			],
+			[
+				"pagest",
+				"document\\config\\pagestyle.tex"
+			],
+			[
+				"abst",
+				"document\\chapter\\abstract.tex"
+			],
+			[
+				"confdoc",
+				"document\\config\\document.tex"
+			],
+			[
+				"last",
+				"document\\chapter\\last_pages.tex"
+			],
+			[
+				"refer",
+				"document\\config\\references.tex"
+			],
+			[
+				"neo",
+				"document\\chapter\\neo4j.tex"
+			],
+			[
+				"cat_attribute",
+				"document\\resource\\latex\\cat_attribute.tex"
+			],
+			[
+				"listings",
+				"document\\config\\listings.tex"
+			],
+			[
+				"devel",
+				"document\\config\\development.tex"
+			],
+			[
+				"confdocument",
+				"document\\config\\document.tex"
+			],
+			[
+				"jq",
+				"document\\chapter\\jqassistant.tex"
+			],
+			[
+				"tabul",
+				"document\\config\\tabular.tex"
+			],
+			[
+				"cat_method",
+				"document\\resource\\latex\\cat_method.tex"
+			],
+			[
+				"cat_class_node",
+				"document\\resource\\latex\\cat_class_node.tex"
+			],
+			[
+				"catclassno",
+				"document\\resource\\latex\\cat_class_node.tex"
+			],
+			[
+				"dev",
+				"document\\config\\development.tex"
+			],
+			[
+				"anal",
+				"document\\chapter\\analysis.tex"
+			],
+			[
+				"documee",
+				"document\\document.tex"
+			],
+			[
+				"qualit",
+				"document\\chapter\\codequality.tex"
+			],
+			[
+				"listin",
+				"document\\config\\listings.tex"
+			],
+			[
+				"analy",
+				"document\\chapter\\analysis.tex"
+			],
+			[
+				"conf",
+				"document\\config\\document.tex"
+			],
+			[
+				"doc",
+				"document\\document.tex"
+			],
+			[
+				"deve",
+				"document\\config\\development.tex"
+			],
+			[
+				"ga",
+				"document\\config\\graphics.tex"
+			],
+			[
+				"ma",
+				"script\\maven.ps1"
+			],
+			[
+				"maven",
+				"document\\resource\\latex\\maven.tex"
+			],
+			[
+				"m",
+				"script\\maven.ps1"
+			],
+			[
+				"docuem",
+				"document\\document.tex"
+			],
+			[
+				"development",
+				"document\\config\\development.tex"
+			],
+			[
+				"multiple_nodes",
+				"document\\resource\\latex\\multiple_nodes.tex"
+			],
+			[
+				"la",
+				"document\\chapter\\last_pages.tex"
+			],
+			[
+				"fir",
+				"document\\chapter\\first_pages.tex"
+			],
+			[
+				"cov",
+				"document\\resource\\latex\\cover.tex"
+			],
+			[
+				"lisin",
+				"document\\config\\listings.tex"
+			],
+			[
+				"ack",
+				"document\\chapter\\acknowledgement.tex"
+			],
+			[
+				"docu",
+				"document\\document.tex"
+			],
+			[
+				"cover",
+				"document\\resource\\latex\\cover.tex"
+			],
+			[
+				"decl",
+				"document\\chapter\\declaration.tex"
+			],
+			[
+				"ta",
+				"document\\config\\tabular.tex"
+			],
+			[
+				"first",
+				"document\\chapter\\first_pages.tex"
+			],
+			[
+				"titl",
+				"document\\chapter\\title.tex"
+			],
+			[
+				"docutex",
+				"document\\config\\document.tex"
+			],
+			[
+				"lastp",
+				"document\\chapter\\last_pages.tex"
+			],
+			[
+				"confdocumtex",
+				"document\\config\\document.tex"
+			],
+			[
+				"itnro",
+				"document\\chapter\\introduction.tex"
+			],
+			[
+				"pro",
+				"document\\resource\\latex\\process.tex"
+			],
+			[
+				"tit",
+				"document\\chapter\\title.tex"
+			],
+			[
+				"int",
+				"document\\chapter\\introduction.tex"
+			],
+			[
+				"math",
+				"document\\config\\math.tex"
+			],
+			[
+				"confdocu",
+				"document\\config\\document.tex"
+			],
+			[
+				"docue",
+				"document\\document.tex"
+			],
+			[
+				"devl",
+				"document\\config\\development.tex"
+			],
+			[
+				"catcla",
+				"document\\resource\\latex\\cat_class_node.tex"
+			],
+			[
+				"catattr",
+				"document\\resource\\latex\\cat_attribute.tex"
+			],
+			[
+				"tab",
+				"document\\config\\tabular.tex"
+			],
+			[
+				"pages",
+				"document\\config\\pagestyle.tex"
+			],
+			[
+				"cdocumenttex",
+				"document\\config\\document.tex"
+			],
+			[
+				"tabularte",
+				"document\\config\\tabular.tex"
+			],
+			[
+				"documenttex",
+				"document\\document.tex"
+			],
+			[
+				"re",
+				"document\\config\\references.tex"
+			],
+			[
+				"bib",
+				"document\\resource\\reference\\references.bib"
+			],
+			[
+				"refe",
+				"document\\config\\references.tex"
+			],
+			[
+				"doctex",
+				"document\\config\\document.tex"
+			],
+			[
+				"tabtex",
+				"document\\config\\tabular.tex"
+			],
+			[
+				"tabular",
+				"document\\config\\tabular.fls"
+			],
+			[
+				"tabl",
+				"document\\config\\tabular.tex"
+			],
+			[
+				"configdoc",
+				"document\\config\\document.tex"
+			],
+			[
+				"cat.java",
+				"document\\resource\\code\\java\\Cat.java"
+			],
+			[
+				"listing",
+				"document\\config\\listings.tex"
+			],
+			[
+				"attend_class_nodes",
+				"document\\resource\\latex\\attend_class_nodes.tex"
+			],
+			[
+				"cat",
+				"resource\\code\\java\\Cat.java"
+			],
+			[
+				"intro",
+				"chapter\\introduction.tex"
+			],
+			[
+				"lsitings",
+				"config\\listings.tex"
+			],
+			[
+				"lis",
+				"config\\listings.tex"
+			],
+			[
+				"attend",
+				"resource\\latex\\attend_class_nodes.tex"
+			],
+			[
+				"mul",
+				"resource\\latex\\multiple_nodes.tex"
+			],
+			[
+				"li",
+				"config\\listings.tex"
+			],
+			[
+				"all",
+				"resource\\code\\cypher\\all_nodes.cypher"
+			],
+			[
+				"conlis",
+				"config\\listings.tex"
+			],
+			[
+				"att",
+				"resource\\latex\\attend_class_nodes.tex"
+			],
+			[
+				"config",
+				"config\\graphics.tex"
+			],
+			[
+				"confdev",
+				"config\\development.tex"
+			],
+			[
+				"in",
+				"chapter\\introduction.tex"
+			],
+			[
+				"codoctex",
+				"config\\document.tex"
+			],
+			[
+				"confgra",
+				"config\\graphics.tex"
+			],
+			[
+				"sing",
+				"resource\\latex\\single_node.tex"
+			],
+			[
+				"inro",
+				"chapter\\introduction.tex"
+			],
+			[
+				"sett",
+				"seminararbeit neo4j.sublime-project"
+			],
+			[
+				"dee",
+				"config\\development.tex"
+			],
+			[
+				"do",
+				"document.tex"
+			],
+			[
+				"",
+				"config\\document.tex"
+			],
+			[
+				"ondoc",
+				"config\\document.tex"
+			],
+			[
+				"confdocte",
+				"config\\document.tex"
+			],
+			[
+				"deck",
+				"resource\\image\\deckblatt.pdf_tex"
+			],
+			[
+				"pdf",
+				"resource\\image\\deckblatt.pdf_tex"
+			],
+			[
+				"refbib",
+				"resource\\reference\\references.bib"
+			],
+			[
+				"ttiex",
+				"chapter\\title.tex"
+			],
+			[
+				"tittes",
+				"C:\\Users\\Stefan\\AppData\\Roaming\\Sublime Text 3\\Packages\\User\\LaTeXTools.sublime-settings"
+			],
+			[
+				"confdoctex",
+				"config\\document.tex"
+			],
+			[
+				"titlete",
+				"chapter\\title.tex"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"C:\\Users\\Stefan\\OneDrive\\Dokumente\\Seminararbeit_neo4j\\document\\seminararbeit neo4j.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 204.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

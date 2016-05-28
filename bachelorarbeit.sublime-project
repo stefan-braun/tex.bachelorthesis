@@ -1,0 +1,18 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"file_exclude_patterns": ["*.log","*.pyc", "*.pyo", "*.exe", "*.dll", "*.obj","*.o", "*.a", "*.lib", "*.so", "*.dylib", "*.ncb", "*.sdf", "*.suo", "*.pdb", "*.idb", ".DS_Store", "*.class", "*.psd", "*.db", "*.sublime-workspace"],
+		}
+	],
+	"settings":{
+	},
+	"build_systems": [
+		{
+			"name": "Make Indices",
+			"cmd": ["makeindex", "$file"],
+			"selector": "source.latex"
+		}
+	]
+}

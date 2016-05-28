@@ -1,0 +1,77 @@
+%!TEX root = ../document.tex
+
+% Intro Quote
+\makeatletter
+\newenvironment{chapquote}[2][2em]
+{\setlength{\@tempdima}{#1}%
+	\def\chapquote@author{#2}%
+	\parshape 1 \@tempdima \dimexpr\textwidth-2\@tempdima\relax%
+	\itshape}
+{\par\normalfont\hfill--\ \chapquote@author\hspace*{\@tempdima}\par\bigskip}
+\makeatother
+
+
+\DeclareCaptionFont{ResponseOrangeCaption}{\color{ResponseOrange}}
+\DeclareCaptionFont{MyDarkBlueCaption}{\color{MyDarkBlue}}
+\definecolor{MyMarginnoteColor}{gray}{0.3}
+\newcommand\insertMyMarginnoteColor{\color{MyMarginnoteColor}}
+
+\newcommand{\myMarginnote}[1]{%
+	\marginnote{% needs marginnote package
+		\RaggedRight% needs ragged2e package
+		\insertMyMarginnoteColor%
+		\lineskiplimit=-\maxdimen%
+		\normalfont\sffamily\scriptsize%
+		#1}%
+}
+
+\usepackage{pdflscape}
+\usepackage{multicol}
+
+% URL überall umbrechen
+\makeatletter
+\g@addto@macro{\UrlBreaks}{\UrlOrds}
+\makeatother
+\expandafter\def\expandafter\UrlBreaks\expandafter{\UrlBreaks%  save the current one
+  \do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j%
+  \do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t%
+  \do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D%
+  \do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N%
+  \do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X%
+  \do\Y\do\Z}
+
+
+
+\newcounter{myTestDefinitionCounter}
+\providecommand{\myTestDefinition}[4]{%
+\stepcounter{myTestDefinitionCounter}%
+\subsection*{{\normalsize \#}{\arabic{myTestDefinitionCounter}} #1 $\big(\beta_{\arabic{myTestDefinitionCounter}}=#4\big)$}
+\paragraph{Testablauf}#2
+\paragraph{Benotung}#3
+}
+
+% Keine caption in margins
+\renewenvironment{margincap}{}{}
+
+%menukeys nach xcolor!!!
+\usepackage{menukeys}
+
+\definecolor{MyMarginnoteColor}{gray}{0.2}
+
+
+
+% Listing statt Abbildung in listoflistings
+\usepackage{etoolbox}
+\addto\captionsngerman{%
+  \renewcommand{\listlistingname}{Quellcodeverzeichnis}% <--- ??
+  \renewcommand{\listingname}{Listing}% <--- ??
+}
+\makeatletter
+\let\l@listing\l@figure
+\patchcmd{\l@listing}{\cftfigpresnum}{\cftlistingpresnum}{}{}
+\newcommand\cftlistingpresnum{\listingname~}
+\makeatother
+
+
+% it gibts nicht mehr
+\renewcommand{\it}{\itshape}

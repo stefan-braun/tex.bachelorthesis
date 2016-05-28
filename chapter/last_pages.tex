@@ -1,0 +1,236 @@
+%!TEX root = ../document.tex
+
+\begin{appendices}
+\input{chapter/test_definition}
+\input{chapter/test_results}
+
+\chapter{Pessimistisches und Optimistisches Sperren}
+\label{ch:locking.workspaces}
+
+Im Abschnitt \ref{sec:workspaces} wurde das Workspace-Konzept von ReEvent vorgestellt. Hierbei können Concurrency-Probleme auftreten. Dieses Kapitel diskutiert Ansätze zur Auflösung oder Umgehung solcher Probleme in Bezug auf ReEvent.
+
+\paragraph{Pessimistisches Sperren} entspricht dem, was klassischerweise als \emph{Locking} bezeichnet wird. Zu Beginn der Änderung erhält der Prozess\footnote{Prozess ist im folgenden gleichbedeutend mit Benutzer, in der Literatur wird Concurrency häufig an einem abstrakten Prozessbegriff dargestellt}, der eine Änderung durchführen möchte, einen \emph{write lock} für das zu ändernde Objekt. Dieser Lock entspricht dem Privileg, das Objekt ändern zu dürfen. Möchte ein anderer Prozess eine Änderung an diesem Objekt durchführen, so muss er warten bis der erste Prozess diesen Lock wieder freigegeben hat. Wurden alle gewünschten Änderungen durchgeführt, kann das Objekt gespeichert werden -- ein Lost Update ist nicht möglich, da kein anderer Prozess in der Zwischenzeit eine Änderung durchführen konnte \cite[S. 311]{Harrington.2009}.
+
+Aus der Verwendung dieses Verfahrens entstehen jedoch weitere Probleme. Zu aller erst können keine zwei Editoren gleichzeitig eine Änderung an beispielsweise derselben Veranstaltung durchführen -- was eine Einschränkung in der User Experience darstellt. Wird eine Veranstaltung bereits editiert, soll heißen das für diese Veranstaltung der Lock belegt ist, muss an einem weiteren Editor eine entsprechende Meldung ausgegeben werden.
+
+Einen weiteren Nachteil liegt in der Art, in der der Lock wieder freigegeben wird. Dies ist an eine Aktion des Benutzers gekoppelt, nämlich dem Abspeichern der Änderungen. Versäumt der Benutzer dies durchzuführen, oder möchte er die Änderungen zu einem deutlich späteren Zeitpunkt fortsetzen, so sind die geänderten Objekte dauerhaft für fremde Änderungen gesperrt. Um eine solche Situation wieder aufzulösen, muss der Lock an ein Timeout gekoppelt werden. Hält der Editor den exklusiven Schreibzugriff länger als eine festgelegte Dauer, werden seine Änderungen verworfen und der Lock wieder freigegeben. Für diesen Timeout muss ein Mittelweg zwischen Bearbeitungsdauer und maximal erträglicher Wartezeit für weiteres Editieren des Objekten gewählt werden.
+
+Als letztendlich klassisches Problem von nebenläufigen Prozessen kann man \emph{Deadlocks} bezeichnen. Wird bei der Bearbeitung einer Veranstaltung auch der Veranstaltungsort editiert, so wird für jedes der beiden Objekte der exklusive Schreibzugriff benötigt. Auch die historischen Schritte aus \ref{sec:history.steps} und die Mehrsprachigkeit in \ref{sec:ReEvent:MultiLanguage} werden über mehrere zusammenhängende Objekte realisiert, für welche gegebenenfalls einzeln Locks verteilt werden müssten. Angenommen die beiden Benutzer A und B aus obigen Beispiel möchten Anpassungen sowohl an einer Veranstaltung als auch am zugehörigen Ort durchführen. A erhält den Lock für die Veranstaltung und B für den Ort. Nun möchten beide jeweils das zweite Objekt editieren -- können dies jedoch nicht, da der andere den Lock für das Objekt hält. Wenn nun beide Benutzer darauf warten, dass der andere seinen exklusiven Schreibzugriff abgibt, liegt ein Deadlock vor. \cite[S. 314]{Harrington.2009} zählt zwei verschiedene Möglichkeiten auf, Deadlocks zu beheben. \emph{Detection} bedeutet Situationen zu erkennen, in welchen ein Deadlock vorliegt. In diesem Fall muss sich das System für einen der Benutzer entscheiden, welcher alle benötigten Locks erhält -- der Benutzer, der den exklusiven Schreibzugriff zuvor hielt, verliert diesen. Nachdem der erste Benutzer seine Arbeiten abgeschlossen hat, kann der zweite seine Arbeit fortsetzen. Alternativ dazu kann ein Benutzer vor Beginn der Änderung alle zu ändernden Objekte auswählen und darf mit der Editierung nur beginnen, wenn er auch alle hierzu notwendigen Locks erhält. Dies wird üblicherweise dadurch realisiert, dass die Locks in einer feststehenden Reihenfolge angefragt werden.\footnote{Die Reihenfolge kann beispielsweise anhand von globalen, eindeutigen Identifier erstellt werden. Objekte in Flow erhalten eine \texttt{Persistence\_Object\_Identifier} genannte UUID. Vergleiche hierzu \url{https://github.com/neos/flow/blob/41d1034a96e93daa057684c7860d7b49ed6d06fc/Classes/TYPO3/Flow/Persistence/Aspect/PersistenceMagicAspect.php\#L92}} Setzt man diese Anforderung jedoch in den Kontext, dass ein Benutzer von ReEvent üblicherweise kein Wissen über das Domänenmodell des Systems hat -- welches zur Auswahl der Objekte notwendig wäre -- wird klar, dass dies nur mit starken Einschränkungen der Usability oder großem Mehraufwand bei der Implementierung umsetzbar wäre.\footnote{Denkbar wäre beispielsweise ein Assistent, der den Benutzer Schritt für Schritt durch eine Auswahl der benötigten Objekte führt.}
+
+\paragraph{Optimistisches Sperren} stellt eine Alternative zum pessimistischen Ansatz dar, welcher eingesetzt werden kann, wenn die Wahrscheinlichkeit für auftretende Probleme -- wie Lost Update -- als gering erachtet wird. Dies ist der Fall, wenn Lesevorgänge im Vergleich zu Schreibvorgängen sehr viel häufiger auftreten. Das Vorgehen setzt voraus, dass von den zu bearbeitenden Daten eine Arbeitskopie erstellt wird. Lesezugriffe finden auf dem Original statt, Bearbeitung an einer der Kopien. Vor dem Abspeichern der Änderung wird überprüft, ob an dem Original zwischenzeitlich fremde Änderungen durchgeführt wurden. Wird kein solcher Konflikt entdeckt, können die eigenen Änderungen gespeichert werden. Tritt ein Konflikt auf -- wie im obigen Beispiel -- wird der Speichervorgang abgebrochen \cite[S. 318]{Harrington.2009}. Der Benutzer kann nun über die geänderten Daten informiert werden und anschließend erneut versuchen, seine Änderungen abzuspeichern.
+
+\chapter{Usertracking für verhaltensbasierte Empfehlungen}
+\label{ch:tracking}
+
+\vspace{2\baselineskip}
+Für die Empfehlung von Veranstaltungen auf Basis vorheriger Seitenaufrufe, welche in Kapitel \ref{ch:polyglott} dargestellt wird, müssen mehrere Seitenaufrufe eines Nutzers miteinander in Verbindung gebracht werden können. Gründe hierfür zeigt Abschnitt \ref{sec:poly_ident} auf. Dieses Kapitel zeigt mögliche Ansätze hierfür.
+
+\section{HTTP Cookie}
+\label{sec:ident_cookie}
+
+HTTP-Cookies sind Schlüssel"=Wert"=Paare, welche durch HTTP Response Header oder Javascript gesetzt werden können. Bei fort folgenden Aufrufen der gleichen Domain wird der gesetzte Cookie als Parameter mit übertragen \cite[S. 7, 25]{InternetEngineeringTaskForce.April2011}.
+
+Durch Vergabe einer über alle Benutzer einer Webseite eindeutigen ID als Cookie kann dieser Benutzer über mehrere Anfragen hinweg identifiziert werden.
+
+Cookies funktionieren jedoch nur, wenn der Browser diese auch abspeichert. RFC 6265 legt fest, dass der \emph{Set-Cookie} auch ignoriert werden kann \cite[S. 16]{InternetEngineeringTaskForce.April2011}. Moderne Browser verfügen über Einstellungsmöglichkeiten, um das Setzen von Cookies einzuschränken oder gänzlich zu deaktivieren. Beispielsweise kann im aktuellen Google Chrome zwischen den folgenden Einstellungsmöglichkeiten gewählt werden (1) Cookies erlauben (2) Cookies bis zum Beenden des Browsers speichern (3) Cookies verbieten.
+
+Des Weiteren sind Cookies üblicherweise an einen Timeout gebunden -- welches allerdings vom Server durch das \emph{Expires} Attribut im Response Header gesetzt wird. Auch können Cookies jederzeit vom Benutzer gelöscht werden.\footnote{vergleiche vorherigen Absatz}
+
+Außerdem ist die Anwesenheit eines Cookies kein eindeutiges Identifikationsmerkmal: Einerseits könnte es sein, dass sich zwei Personen den selben Arbeitsplatz und den selben Browser teilen. Andererseits kann eine Person auch an zwei getrennten Browsern arbeiten, an beiden würde er einen anderen Cookie und somit eine andere Identität erhalten, wenn er die entsprechende Seite besucht.
+
+Eine gesetzliche Unwägbarkeit betreffend der Verteilung von Cookies ist schließlich die EU-Richtlinie 2009/136/EG. Sie legt fest, dass \enquote{die Speicherung von Informationen [...] nur gestattet ist, wenn der betreffende [...] Nutzer [...] seine Einwilligung gegeben hat} \cite[Artikel 2 Absatz 5]{EUROPEANPARLIAMENTANDOFTHECOUNCIL.2009}. Somit müsste ein Nutzer erst ausdrücklich seine Genehmigung erteilen, ehe ein Webserver Cookies überträgt. Im Gegensatz zu Verordnungen stellt eine EU-Richtlinie kein direkt geltendes Gesetz dar. Jedoch ist jedes EU-Land dazu verpflichtet, diese Richtlinie in das nationale Recht einzugliedern. Dies ist in Deutschland bis dato noch nicht geschehen \cite{Storing.2014}.\footnote{Wobei die zitierte Quelle in \emph{heise online} darauf hinweist, dass Brüssel scheinbar davon ausgeht, dass bestehende deutsche Gesetze diese Grundlage bereits erfüllen.} Diverse Webseiten weisen Besucher daher per Einblendung oder Pop-Up darauf hin, dass diese Seite Cookies verwendet.\footnote{aktuelle Beispiele hierfür sind \url{http://www.chip.de} oder \url{http://www.hp.com}}
+
+All diese Faktoren schränken die Eignung für die längerfristige Identifikation des Benutzers ein.
+
+\section{Frontend-User}
+
+Eine weitere Möglichkeit zur Identifikation stellt eine Mitglieder-Funktion für das Frontend dar. Hierbei könnte sich ein Besucher der Seite registrieren und anschließend wiederholt am Webserver anmelden. Üblicherweise geschieht die Authentifizierung des Benutzers über die Eingabe eines Benutzernamens und eines Passworts. Nach der Anmeldung wird wieder ein Cookie gesetzt, worüber der Benutzer über mehrere Anfragen hinweg dem selben Benutzerkonto zugewiesen werden kann.
+
+Somit gelten wieder die selben Einschränkungen wie in Abschnitt \ref{sec:ident_cookie}. Allerdings ist es möglich, die selbe Person geräteübergreifend zu identifizieren, da dieser wiederholt seine Identität per Benutzername und Passwort bereitstellt. Erneut kann es allerdings passieren, dass sich mehrere Benutzer ein Konto teilen.
+
+In Bezug auf ReEvent könnten über einen Frontend-Bereich eventuell weitere Einstellungen für die Ausgabe getroffen werden, auch könnten einzelne Veranstaltungen vorgemerkt werden. Allein die Empfehlungsfunktion rechtfertigt den zusätzlichen Aufwand -- sowohl in der Entwicklung als auch für jeden einzelnen Benutzer -- nicht. Derzeit ist keine Umsetzung von Frontend-Usern in ReEvent geplant.
+
+\section{Browser Fingerprinting}
+
+Selbst wenn ein Nutzer seinen Browser derart konfiguriert hat, dass dieser keine Cookies annimmt, bestehen dennoch Ansätze diesen Nutzer zu \emph{tracken}. Basierend auf Einstellungen oder Merkmale des Browsers oder des zugrundeliegenden Betriebssystems lässt sich ein Browser mittels \emph{Browser Fingerprinting} mit einer gewissen Wahrscheinlichkeit wiedererkennen \cite[S. 185]{Boos.2015}.
+
+Ein Beispiel ist der User-Agent, der vom Browser bei jeder Anfrage mit übertragen wird.
+
+\begin{listing}[ht!]
+\begin{minted}[breaklines=true,linenos=false]{text}
+Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36
+\end{minted}
+\caption{User-Agent von Google Chrome 47 (64-bit) unter Windows 8.1 Pro}
+\label{lst:google_chrome_useragent}
+\end{listing}
+
+Auch per Javascript auslesbare Informationen können hierzu verwendet werden. Die Eigenschaften \texttt{outerHeight} und \texttt{outerWidth} des globalen \texttt{window}"=Objektes liefern unter Google Chrome die Außenmaße des Browserfensters, das Array \texttt{navigator.plugins[]} enthält Einträge über installierte Browser-Plugins und deren Versionsnummern. Eigenheiten von CPU und GPU lassen sich per Benchmarking bestimmen \cite{Janc.o.J.}.
+
+Schließlich kann auch auf lokal installierte Schriftarten per Bruteforce getestet werden. Ein Ansatz hierzu weist einem HTML-Element einen vorgegebenen Text und eine Schriftart zu, beispielsweise Comic Sans.\footnote{Laut \cite{Sharp.2008} eigne sich Comic Sans hierfür besonders gut, da sich die Schriftart vergleichsweise stark von anderen unterscheide.} Anschließend überprüft man die Breite des umgebenden HTML-Elements, setzt die Schriftart per \texttt{font-family: 'Arial', 'Comic Sans MS'} auf die gesuchte Schriftart (Arial) mit Fallback zur vorherigen und überprüft erneut die Breite des Elements. Hat sich diese geändert, kann davon ausgegangen werden, dass die Schriftart installiert ist \cite{Sharp.2008}. Das Vorhandensein mancher Schriftarten deutet auch auf die Installation bestimmter Programme hin, welche diese Fontdateien automatisch einrichten. \emph{Myriad Pro} und \emph{Minion Pro} werden beispielsweise durch den Acrobat Reader installiert.
+
+Generell gilt, je stärker ein Benutzer seinen Browser angepasst hat, umso leichter lässt sich dieser per Browser Fingerprinting eindeutig zuordnen \cite[S. 185]{Boos.2015}.
+
+Fingerprinting, welches auf Javascript basiert, funktioniert allerdings nur, solange Javascript auch im Browser aktiviert ist.
+
+\chapter{Statistiken}
+
+\begin{figure}[ht!]
+\centering
+\begin{tikzpicture}
+\begin{axis}[xbar, width=11cm, height=7cm, bar width=10pt,nodes near coords={\pgfmathprintnumber\pgfplotspointmeta\%}, nodes near coords align=horizontal, point meta=x * 1, legend pos=south east, xlabel=\textbf{Verteilung von Webprogrammiersprachen}, tick align=outside,  ytick={1,...,10},xmin=0,xmax=100, yticklabels={Erlang,JavaScript,Python,Perl,Ruby,ColdFusion,static files,Java,ASP.NET,PHP}]
+\addplot[draw=ResponseOrange, fill=ResponseOrange] coordinates {(0.1,1) (0.2,2) (0.2,3) (0.5,4) (0.6,5) (0.7,6) (1.6,7) (3.0,8) (16.4,9) (81.4,10)};
+\end{axis}
+\end{tikzpicture}
+\caption[Verteilung von Webprogrammiersprachen]{Verteilung von Webprogrammiersprachen, ermittelt von W3Techs/Q-Success DI Gelbmann GmbH. Die Grafik zeigt den Anteil der jeweiligen Sprache an den Top 10 Millionen des Alexa Rankings. Da Webseiten gleichzeitig mehrere Technologien verwenden können, kann die Summe 100\% übersteigen. Sprachen mit einem Anteil unter 0,1\% werden nicht aufgeführt. \cite{QSuccess.2015} }
+\label{fig:w3tech.languages}
+\end{figure}
+
+
+\begin{figure}[ht!]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=\textwidth, height=6cm, tick align=outside, ylabel={Veranstaltungen}, x tick label style={/pgf/number format/.cd, scaled x ticks = false, set thousands separator={}, fixed}]
+\addplot[draw=ResponseOrange, ultra thick] coordinates {(2014,2141) (2013,2206) (2012,2593) (2011,2664) (2010,3005) (2009,2234) (2008,2417) (2007,2427) (2006,1981) (2005,1618) (2004,1685) (2003,3150) (2002,3512) (2001,8648) (2000,4649)};
+\end{axis}
+\end{tikzpicture}
+\caption[Veranstaltungen pro Jahr in INsite]{Veranstaltungen pro Jahr in INsite. Der Zeitbereich reicht vom Jahr 2000 bis 2014. Ausschlaggebend für die Zuordnung zu einem Jahr ist das Beginn"=Datum der Veranstaltung, nicht das Ende"=Datum. Durchschnittlich werden pro Jahr \numprint{2995} Veranstaltungen hinzugefügt, insgesamt verwaltet die INsite"=Datenbank \numprint{44938} Veranstaltungen. Die Daten wurden aus der INsite"=Datenbank auf Basis der SQL"=Abfrage aus Listing \ref{lst:sql_insite_events_per_year} gewonnen.}
+\label{fig:events_per_year_insite}
+\end{figure}
+
+
+
+
+\chapter{Tabellen}
+\renewcommand{\arraystretch}{1.2}
+\arrayrulecolor{TableRuleColor}
+\begin{table}[ht!]
+\centering
+\begin{tabularx}{\textwidth}{lcX}
+Framework & letzte Änderung & Anmerkungen \\
+\hline
+Coldbox & 14.04.2015  & \\
+CFWheels & 20.10.2015 & \\
+Fusebox & 11.05.2012 & \\
+Mach II &  15.01.2014 & Weiterentwicklung wurde offiziell für beendet erklärt \cite{TeamMachII.2013} \\
+Model Glue &  14.10.2014 & \\
+\end{tabularx}
+\caption[ColdFusion Frameworks]{
+Auflistung diverser Webframeworks für ColdFusion. \enquote{letzte Änderung} bezieht sich auf den master"=Branch der folgenden github"=Repositories.
+\url{https://github.com/coldbox/coldbox-platform}\\
+\url{https://github.com/cfwheels/cfwheels}\\
+\url{https://github.com/fusebox-framework/Fusebox-ColdFusion}\\
+\url{https://github.com/Mach-II/Mach-II-Framework}\\
+\url{https://github.com/modelglue/modelglue-framework}\\
+Stand: 25.10.2015
+}
+\label{tab:ColdFusion.Frameworks}
+\end{table}
+
+\chapter{Listings}%
+
+
+\begin{listing}
+\begin{minted}{sql}
+SELECT
+	COUNT(VV_Veranstaltungen.Veranst_ID) AS events,
+	YEAR(VV_Veranstaltungen.Datum_von) AS _year
+FROM
+	VV_Veranstaltungen
+GROUP BY
+	YEAR(VV_Veranstaltungen.Datum_von)
+ORDER BY
+	_year DESC
+\end{minted}
+\caption[SQL Statement zur Auflistung der jährlichen Neueintragungen in INsite]{SQL Statement zur Auflistung der jährlichen Neueintragungen in INsite}
+\label{lst:sql_insite_events_per_year}
+\end{listing}
+
+\begin{listing}[ht]
+\begin{minted}{sql}
+SELECT
+	*
+FROM
+	event
+WHERE
+	to_tsvector(
+		coalesce(name, '') || ' ' ||
+		coalesce(description, '') || ' ' ||
+		coalesce(venue, '')
+	) @@ plainto_tsquery('Suchbegriff')
+LIMIT 10
+\end{minted}
+\caption{Volltextsuche mit PostgreSQL}
+\label{lst:fulltext_postgresql}
+\end{listing}
+
+\begin{listing}[ht]
+\begin{minted}{sql}
+SELECT
+	*
+FROM
+	event
+WHERE
+	name % 'Suchbegriff'
+OR
+	description % 'Suchbegriff'
+OR
+	venue % 'Suchbegriff'
+LIMIT 10
+\end{minted}
+\caption{N-Gramm basierte Suche mit PostgreSQL}
+\label{lst:ngram_postgresql}
+\end{listing}
+
+\begin{listing}[ht]
+\begin{minted}{sql}
+SELECT
+	*
+FROM
+	event
+WHERE
+	name LIKE '%Suchbegriff%'
+OR
+	description LIKE '%Suchbegriff%'
+OR
+	venue LIKE '%Suchbegriff%'
+LIMIT 10
+\end{minted}
+\caption{LIKE basierte Suche mit PostgreSQL}
+\label{lst:ngram_postgresql_search_inappendix}
+\end{listing}
+
+
+
+\begin{listing}[ht]
+\begin{minted}[breaklines]{text}
+http://<AWS Server ID>.us-east-1.cloudsearch.amazonaws.com/ 2013-01-01/search?q=Suchbegriff&q.parser=dismax
+\end{minted}
+\caption{Suche in Amazon CloudSearch mit \emph{dismax} Parser}
+\label{lst:search_aws}
+\end{listing}
+
+\begin{listing}[ht]
+\begin{minted}[breaklines]{text}
+http://localhost:8983/solr/<core>/select?q=Suchbegriff &defType=edismax&qf=name_s+venue_s+description_t&stopwords=true
+\end{minted}
+\caption{Suche in Apache Solr mit \emph{edismax} Parser}
+\label{lst:search_solr}
+\end{listing}
+
+
+
+\end{appendices}
+
+%TODO vor Abgabe prüfen, ob URL-Problem mit Citavi besteht und der Export funktioniert hat
+\printbibliography
+
+\chapter*{Erklärung}
+\addcontentsline{toc}{chapter}{\texorpdfstring{\spacedlowsmallcaps{Erklärung}}{Erklärung}}
+\phantomsection
+
+Ich erkläre hiermit, dass ich die Arbeit selbständig verfasst, noch nicht anderweitig für Prüfungszwecke vorgelegt, keine anderen als die angegebenen Quellen oder Hilfsmittel benützt sowie wörtliche und sinngemäße Zitate als solche gekennzeichnet habe.\footnote{nach \enquote{Muster für die Erklärung nach § 18 Abs. 4 Nr. 7 APO HI}}
+
+\vspace{2\baselineskip}
+\noindent Ingolstadt, den \today
+\par\noindent\makebox[2.5in]{} \hfill\makebox[2.0in]{\hrulefill}%
+\par\noindent\makebox[2.5in][l]{} \hfill\makebox[2.0in][l]{Stefan Braun}

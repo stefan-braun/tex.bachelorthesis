@@ -1,0 +1,44 @@
+%!TEX root = ../document.tex
+\usepackage[section=chapter,toc,acronym,style=long,nolist]{glossaries}
+
+% \makenoidxglossaries
+%\makeglossaries
+
+\usepackage{imakeidx}
+\usepackage{acronym}
+% \makeindex
+
+
+\renewcommand*{\indexpagestyle}{chapterpage}
+
+%Further Settings
+\setacronymstyle{footnote-sc}
+
+
+% Acronym definitions
+\newacronym{SOAP}{SOAP}{Simple Object Access Protocol}
+\newacronym{CFML}{CFML}{ColdFusion Markup Language}
+\newacronym{SQL}{SQL}{Structured Query Language}
+
+% Term definitions
+%TODO Definitions
+\newglossaryentry{Backend}{
+	name=Backend,
+	description={Nicht das Frontend}
+}
+\newglossaryentry{SearchEngine}{
+	name=Search Engine,
+	description={Zum Suchen}
+}
+\newglossaryentry{ReEvent}{
+	name=ReEvent,
+	description={Veranstaltungsverwaltungssystem auf Basis des PHP-Frameworks Flow, Nachfolger von INsite als Veranstaltungsverwaltung der Stadt Ingolstadt.}
+}
+\newglossaryentry{INsite}{
+	name=INsite,
+	description={Veranstaltungsverwaltung der Stadt Ingolstadt, entwickelt unter Adobe ColdFusion.}
+}
+\newglossaryentry{ColdFusion}{
+	name=ColdFusion,
+	description={Applicationserver, welcher die Sprache CFML anbietet. Neben der kostenpflichtigen Version von Adobe existieren auch OpenSource Implementierungen, wie beispielsweise Railo.}
+}

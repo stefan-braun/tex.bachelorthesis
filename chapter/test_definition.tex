@@ -1,0 +1,156 @@
+%!TEX root = ../document.tex
+\chapter{Kriterienkatalog}
+\label{ch:test_Definition}
+Folgende Tabellen definieren die einzelnen Testabläufe für die Evaluation in Kapitel \ref{ch:eval}. Jeder Test erhält eine eindeutige Nummer, einen Titel, eine Beschreibung des Testablaufs, ein Benotungsschema und ein Gewicht $\beta$.
+
+\myTestDefinition
+{Volltextsuche -- Effektivität}
+{
+Hierzu wird eine Datenbank mit \numprint{30} veranstaltungsbezogenen Datensätzen aufgebaut, je zehn Datensätze sind einem Suchbegriff zugeordnet. Anschließend wird mit jedem der drei Suchbegriffe eine Suche durchgeführt und über alle Suchanfragen hinweg Precision und Recall berechnet. Die Suchbegriffe lauten \enquote{Bus}, \enquote{Stadtrat Sitzung} sowie \enquote{Viehmarkt}.
+}
+{Für $\alpha$ wird das F"=Maß berechnet, welches in Abschnitt \ref{sec:eval:effectivity} dargestellt wurde.}
+{5}
+
+\myTestDefinition
+{Volltextsuche -- Durchsatz}
+{
+\numprint{10000} Veranstaltungsdatensätze werden im Suchsystem hinterlegt. Die Daten stammen aus INsite und bestehen aus Veranstaltungsname, Beschreibung und Ort. Die Anfragen basieren auf den ausgewerteten Webserverlogs von INsite. Anschließend werden \numprint{500} Suchanfragen gestartet. Es wird die Zeit vom Start der ersten Anfrage bis zum Erhalt des letzten Ergebnisses gemessen. Das Testskript startet acht Threads, welche die \numprint{500} Anfragen parallel abarbeiten sollen.
+}
+{
+Die Note durch eine Normierung auf das beste Testergebnis ermittelt. Sei $d_{max}$ der maximale Durchsatz, so ergibt sich $\alpha = \frac{d}{d_{max}}$.
+}
+{2}
+
+\myTestDefinition
+{Volltextsuche -- Latenz}
+{
+\numprint{10000} Veranstaltungsdatensätze werden im Suchsystem hinterlegt. Die Daten stammen aus INsite und bestehen aus Veranstaltungsname, Beschreibung und Ort. Anschließend werden \numprint{500} Suchanfragen gestartet. Es wird die Dauer jeder einzelnen Anfrage gemessen. Wie auch schon beim Test zuvor werden acht Threads gestartet, welche die \numprint{500} Anfragen parallel abarbeiten sollen.
+}
+{
+Bei der Analyse von Latenzen sind insbesondere hohe Werte kritisch. Entsprechend wird ein Durchschnitt über die längsten 5\,\% der Anfragen gebildet. Alle 0,2 Sekunden dieses Wertes wird $\alpha$ um 0,1 reduziert.
+}
+{3}
+
+\myTestDefinition
+{Filterung nach Datum}
+{
+Ein Dokument wird mit Beginn- (01.01.2014 12:30 Uhr) und Endezeitpunkt (02.01.2014 09:00 Uhr) versehen. Getestet wird ob das Dokument durch Angabe eines Zeitraums vor Beginn oder nach Ende aus der Ergebnismenge entfernt wird, sowie ob es bei einem überlappenden Zeitraum in der Ergebnismenge bleibt.\footnote{in Anlehnung an das Suchformular von INsite}} Neben der offensichtlichen direkten Filterung von Veranstaltungen würde dies auch die Abfrage zeitpunktabhängiger Daten erlauben.
+{Bei korrekter Filterung $\alpha = 1$. Bei fehlerhafter Filterung, oder falls die Filterung systembedingt nicht durchgeführt werden kann $\alpha = 0$.}
+{2}
+
+
+\myTestDefinition
+{Filterung nach numerischer ID}
+{
+Ist das Suchsystem in der Lage, nach numerischen Identifikatoren zu filtern? Neben der Einsatzmöglichkeit zur Filterung nach direkten Eigenschaften der Veranstaltung\footnote{beispielsweise der Veranstaltungsort, der per Datenbank-ID identifiziert wird} könnte somit auch das Konzept der Workspaces abgebildet werden, indem jedem Workspace eine eindeutige ID zugeordnet wird.
+}
+{
+$\alpha = 0$ falls die Filterung nicht möglich ist, $\alpha = 1$ andernfalls.
+}
+{2}
+
+\myTestDefinition
+{Umkreissuche}
+{
+Getestet wird eine Filterung auf Basis von GPS-Koordinaten. Hierbei werden zwei Dokumente jeweils mit den folgenden GPS-Koordinaten versehen:
+Rathausplatz Ingolstadt (48.762951, 11.425548) und Eiffelturm Paris (48.858363, 2.294438). Es wird überprüft, ob das System in der Lage ist, Veranstaltungen im Radius $r = 10km$ um den Punkt (48.760335, 11.438925)\footnote{Saturnarena Ingolstadt, GPS-Koordinaten wurden mit Hilfe des Onlinekartendienstes Google Maps bestimmt} zu bestimmen. Lediglich die erste der beiden GPS-Koordinaten liegt innerhalb des Radius.}
+{Bei korrekter Filterung $\alpha = 1$. Bei fehlerhafter Filterung, oder falls die Filterung systembedingt nicht durchgeführt werden kann $\alpha = 0$.}
+{1}
+
+
+\myTestDefinition
+{Geschwindigkeit der Indizierung}
+{
+Es wird überprüft, wie lange es dauert, \numprint{1000} Veranstaltungsdatensätze zu indizieren oder abzuspeichern. Die Daten stammen aus INsite und bestehen aus Veranstaltungsname, Beschreibung, Ort, Beginn und Ende. Es wird jeweils der Median aus drei Testdurchläufen verwendet. Es wird die clientseitige Dauer zwischen Beginn und Ende der Indizierungsanforderung gemessen. Dementsprechend kann es sein, dass das Suchsystem asynchron weiterarbeitet und der eigentliche Vorgang länger dauert als gemessen.
+}
+{
+Für jede ganze Sekunde, die der Indizierungsvorgang benötigt, wird 0,1 von $\alpha$ abgezogen, minimaler Wert für $\alpha$ ist 0. Bei SQL-basierten Suchsystemen wird die Dauer aus dem Unterschied zwischen normaler Eintragung der Daten und Eintragung bei einer mit Index versehenen Tabelle berechnet.
+}
+{1}
+
+\myTestDefinition
+{Mehrsprachige Inhalte}
+{
+Es wird überprüft, ob das Suchsystem nach eigener Aussage (beispielsweise Dokumentation) diverse für ReEvent relevante Sprachen unterstützt.
+}
+{$\alpha$ setzt sich aus den Einzelbewertungen für Deutsch(0,6), Englisch(0,2), Chinesisch(0,05)\footnote{traditionell und vereinfacht}, Russisch(0,05), Französisch(0,05) und Italienisch(0,05)\footnote{In Anlehnung an die Städtepartnerschaften der Stadt Ingolstadt, weitere Sprachen wie Polnisch oder Türkisch wurden ausgeklammert, vergleiche \url{http://www.ingolstadt.de/partnerstaedte}} zusammen. Wird davon ausgegangen, dass die Suche unabhängig von der Sprache funktioniert, erhält das Suchsystem volle Punktzahl.}
+{1}
+
+\myTestDefinition
+{Rechtschreibfehlererkennung}
+{
+Die deutschsprachige Wikipedia stellt unter \url{https://de.wikipedia.org/w/index.php?title=Wikipedia:Liste_von_Tippfehlern/Für_Maschinen&oldid=105950498}\footnote{Permalink, Stand 02.01.2016, bearbeitet von den Wikipedia-Nutzern \enquote{Dachaz~dewiki} und \enquote{Das Robert} und bereitgestellt unter der Creative Commons Attribution-ShareAlike 3.0 Unported Lizenz
+} eine Liste von \numprint{1963} häufig auftretenden Rechtschreibfehlern bereit.
+
+Hiervon wird je der korrekte Teil in die Suchmaschine übertragen und anschließend durch eine Abfrage, welche die fehlerhafte Variante enthält überprüft, ob das Suchsystem den Rechtschreibfehler erkennen kann.
+}
+{
+$\alpha$ entspricht dem auf zwei Nachkommastellen gerundeten Anteil der korrekt erkannten Begriffe.
+}
+{2}
+
+\myTestDefinition
+{Durchsuchung von externen Dateien}
+{Es wird überprüft, ob das Suchsystem in der Lage ist, HTML, Microsoft Word docx, und PDF-Dateien ohne vorherige Aufbereitung zu indizieren. Weitere Tests beinhalten OCR und die Durchsuchung von MP3-Metadaten.
+}
+{$\alpha$ setzt sich aus den Einzelbewertungen für HTML(0,3), PDF(0,3), Word(0,3), OCR(0,05) und MP3(0,05) zusammen.}
+{1}
+
+\myTestDefinition{Jährliche Kosten}
+{
+Fallen durch das Suchsystem jährliche Kosten an, so werden diese durch dieses Kriterium erfasst. Eine Hochrechnung der Kosten geschieht anhand der Nutzungsstatistiken von INsite mit einem Aufschlag von 20\,\%. Es ergeben sich somit \numprint{4540} Anfragen, \numprint{3600} Veranstaltungen mit durchschnittlich 1,13 KB Speicherbedarf. Quellen hierzu stellen das Diagramm \ref{fig:events_per_year_insite} und der Abschnitt \ref{sec:requirements_insite} dar. Die folgende T-SQL\footnote{SQL-Dialekt von Microsoft SQL Server} Anfrage \ref{lst:tsql_storage} gibt den gesamten benötigten Speicherplatz der angegebenen Tabelle von INsite sowie die Anzahl der eingetragenen Zeilen zurück. Hieraus lässt sich der Speicherbedarf pro INsite"=Veranstaltung abschätzen.
+
+Unter anderem aufgrund der Konzepte aus dem Kapitel \ref{ch:reevent} (Workspaces, Mehrsprachigkeit, zeitpunktabhängige Daten) können aus ein und derselben Veranstaltung mehrere Dokumente entstehen -- in Abhängigkeit von der Nutzung dieser Aspekte. Somit kann selbst bei einer gleichbleibenden Anzahl von Veranstaltungen mit einer gesteigerten Anzahl an Dokumenten gerechnet werden.
+Indirekte Kosten wie für Wartung, Strom und Internetanbindung werden nicht in die Kalkulation mit einbezogen.
+}
+{
+\begin{equation}
+\alpha =
+\begin{cases}
+	1 ~~ \text{für } Kosten = 0 \text{ €}\\
+	max\big(0,~1 - \frac{1}{10} \lceil \frac{Kosten}{100 \text{ €}} \rceil \big)
+\end{cases}
+\end{equation}
+}
+{2}
+
+\myTestDefinition
+{Hervorhebung von Suchbegriffen}
+{
+Verfügt das Suchsystem über eine Highlighting-Funktion, um Teile des Suchbegriffs in der Trefferliste optisch hervorheben zu können?
+}
+{
+$\alpha = 1$ falls das Suchsystem hierzu in der Lage ist, $\alpha = 0$ andernfalls.
+}
+{1}
+
+\begin{listing}[ht!]
+\begin{margincap}
+\begin{minted}{sql}
+EXECUTE sp_spaceused 'VV_Veranstaltungen'
+\end{minted}
+\caption{T-SQL Abfrage \texttt{sp\_spaceused}}
+\label{lst:tsql_storage}
+\end{margincap}
+\end{listing}
+
+\myTestDefinition
+{Wildcards in Benutzereingaben}
+{
+Ist es möglich, den Suchbegriff um Wildcards zu ergänzen?
+}
+{
+$\alpha = 1$ falls Wildcards unterstützt werden oder systembedingt nicht notwendig sind, $\alpha = 0$ andernfalls.
+}
+{0,2}
+
+\myTestDefinition
+{Boolesche Operatoren}
+{
+Kann der Benutzer einzelne Suchbegriffe mit booleschen Operatoren wie AND, OR und NOT versehen oder verknüpfen?
+}
+{
+$\alpha$ erhöht sich um $\frac{1}{3}$ für jeden unterstützten Operator.
+}
+{0,2}
+

@@ -1,0 +1,2 @@
+makeindex document
+makeglossaries document

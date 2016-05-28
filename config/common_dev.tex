@@ -1,0 +1,80 @@
+%!TEX root = ../document.tex
+\documentclass[
+	a4paper,
+	11pt,
+	DIV=8,
+	bibliography=totoc,
+	listof=totoc,
+	abstract=on,
+	oneside,
+	svgnames,
+	headheight=28pt,
+	footheight=28pt
+	]{scrreprt}
+
+% \usepackage[eulerchapternumbers,beramono,pdfspacing,dottedtoc,listings]{classicthesis}
+% \usepackage{arsclassica}
+\usepackage[colorlinks, linkcolor=black, citecolor=black, filecolor=black, urlcolor=black]{hyperref}
+
+\usepackage[ngerman]{babel}
+\usepackage{float}
+\usepackage{scrhack}
+\usepackage{numprint}
+\usepackage{ifluatex}
+
+\usepackage[singlespacing]{setspace}
+
+\ifluatex
+	\usepackage{fontspec}
+	\defaultfontfeatures{Ligatures=TeX}
+	\newfontfeature{Microtype}{protrusion=default;expansion=default;}
+	\setmainfont[Microtype,Ligatures=TeX,Numbers=OldStyle]{Minion Pro}
+	\setsansfont[Microtype,Scale=MatchLowercase,Ligatures=TeX,Numbers=OldStyle]{Myriad Pro}
+	\setmonofont[Scale=MatchLowercase]{Consolas}
+\else
+	\usepackage[T1]{fontenc}
+	\usepackage[utf8]{inputenc}
+	\usepackage[scaled=.98,sups,osf]{XCharter}% lining figures in math, osf in text
+	\usepackage[scaled=1.04,varqu,varl]{inconsolata}% inconsolata typewriter
+	\usepackage[type1]{cabin}% sans serif
+	\usepackage[charter,bigdelims,vvarbb,scaled=1.07]{newtxmath}
+	\usepackage[cal=boondoxo]{mathalfa}
+	\linespread{1.04}
+\fi
+
+\usepackage{textcomp}
+%\usepackage{eurosans}
+%\let\texteuro\euro
+
+\usepackage[babel,german=quotes]{csquotes}
+\usepackage{geometry}
+\usepackage{calc}
+\usepackage[some]{background}
+\usepackage{setspace}
+\usepackage[toc,page]{appendix}
+\usepackage{microtype}
+
+\usepackage[justification=raggedright]{caption}
+\usepackage[top]{mcaption}
+
+\addtokomafont{captionlabel}{\sffamily\bfseries\small}
+\captionsetup{labelsep=space}
+%set small captions without indentation,
+%starting on second line
+\setcapindent{10pt}
+\addtokomafont{caption}{\footnotesize\sffamily}
+\AtBeginDocument{\setlength{\margincapsep}{7pt}}
+\captionsetup{indention=0pt,format=plain,font={footnotesize,sf}}
+
+\usepackage[automark]{scrlayer-scrpage}
+
+
+\renewcommand{\appendixpagename}{Anhang}
+\renewcommand{\appendixtocname}{Anhang}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage{marginnote}
+\usepackage{ragged2e}
+\usepackage{url}
+
+\setlength{\emergencystretch}{1em}

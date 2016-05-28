@@ -1,0 +1,108 @@
+%!TEX root = ../document.tex
+
+\newcommand{\titlepageFont}{\color{black}\sffamily\Large}
+%\includepdf{front.pdf}
+\begin{titlepage}
+\onehalfspacing
+\setlength{\emergencystretch}{0em}
+
+
+\BgThispage
+\newgeometry{left=2cm,right=5.8cm,bottom=2cm}
+\vspace*{0.2\textheight}
+
+\noindent
+{\Huge\textcolor{white}{{{\spacedlowsmallcaps{Evaluation von Suchsystemen für eine auf NEOS\,CMS basierende  Veranstaltungsverwaltung}}}} \par}
+
+\hfill
+\vspace{3cm}\par
+\noindent
+\begin{minipage}[c][][b]{0.5\linewidth}
+	\begin{flushright}
+		\includegraphics[width =\linewidth]{thi_logo_cropped.pdf} \\
+		\vspace{1cm}
+		\includegraphics[width =\linewidth]{logo_title.pdf} \\
+		\vspace{0.9cm}
+		\printauthor
+	\end{flushright}
+\end{minipage} \hspace{18pt}
+%
+\begin{minipage}{0.04\linewidth}
+
+\end{minipage} \hspace{0pt}
+\begin{minipage}{0.54\linewidth}
+	{  \titlepageFont{\Huge \spacedlowsmallcaps{Bachelorarbeit}} \par}
+	\vspace{0.7cm}
+	\renewcommand{\arraystretch}{1.3}
+	\begin{tabular}{ll}
+		\multicolumn{2}{l}{\titlepageFont{\spacedlowsmallcaps{Technische Hochschule Ingolstadt}}} \\
+		& \\
+		\titlepageFont{Fakultät} & \titlepageFont{Elektrotechnik und Informatik} \\
+		\titlepageFont{Studiengang} & \titlepageFont{Informatik} \\
+		& \\
+		%TODO anpassen!!
+		\titlepageFont{Anmeldung} & \titlepageFont{22.12.2015} \\
+		\titlepageFont{Abgabe} & \titlepageFont{21.01.2016} \\
+		& \\
+		\titlepageFont{Erstprüfer} & \titlepageFont{Prof. Dr. Franz Regensburger} \\
+		\titlepageFont{Zweitprüfer} & \titlepageFont{Prof. Dr. Bernd Hafenrichter} \\
+		\titlepageFont{Betreuer} & \titlepageFont{Günter Huber} \\
+	\end{tabular}
+\end{minipage}
+
+\end{titlepage}
+\restoregeometry
+\setlength{\emergencystretch}{1em}
+
+\singlespacing
+\input{chapter/creative_commons.tex}
+\input{chapter/abstract.tex}
+\tableofcontents
+%Print the glossary
+%\printglossary[type=\acronymtype,title=Abkürzungsverzeichnis,toctitle=Abkürzungsverzeichnis]
+\renewcommand\listfigurename{\texorpdfstring{\spacedlowsmallcaps{Abbildungsverzeichnis}}{Abbildungsverzeichnis}}
+\renewcommand\listtablename{\texorpdfstring{\spacedlowsmallcaps{Tabellenverzeichnis}}{Tabellenverzeichnis}}
+\renewcommand{\listlistingname}{\texorpdfstring{\spacedlowsmallcaps{Quellcodeverzeichnis}}{Quellcodeverzeichnis}}
+
+\clearpage
+
+\begingroup
+	\let\clearpage\relax
+	\let\cleardoublepage\relax
+	\let\cleardoublepage\relax
+
+	\listoffigures
+	\vspace{4ex}
+
+	\listoflistings
+	\vspace{4ex}
+
+	\listoftables
+	\vspace{3ex}
+
+	\pdfbookmark[1]{Abkürzungen}{acronyms}
+	\renewcommand*{\aclabelfont}[1]{\textbf{\textsf{\acsfont{#1}}}}
+	\section*{Abkürzungen}
+	\begin{multicols}{2}
+	\begin{acronym}[HTML]
+		\acro{API}{Application Programming Interface}
+		\acro{CSS}{Cascading Stylesheets}
+		\acro{CFML}{ColdFusion Markup Language}
+		\acro{CMS}{Content Management System}
+		\acro{GIN}{Generalized Inverted Index}
+		\acro{GiST}{Generalized Search Tree}
+		\acro{GPS}{Global Positioning System}
+		\acro{GSA}{Google Search Appliance}
+		\acro{HTML}{Hypertext Markup Language}
+		\acro{ID}{Identifikator}
+		\acro{JSON}{JavaScript Object Notation}
+		\acro{OCR}{Optical Character Recognition}
+		\acro{ORM}{Object-Relational Mapping}
+		\acro{REST}{Representational State Transfer}
+		\acro{SOAP}{Simple Object Access Protocol}
+		\acro{SQL}{Structured Query Language}
+		\acro{URL}{Uniform Resource Locator}
+		\acro{XML}{Extensible Markup Language}
+	\end{acronym}
+	\end{multicols}
+\endgroup

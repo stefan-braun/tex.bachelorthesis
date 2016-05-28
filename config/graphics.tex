@@ -1,0 +1,47 @@
+%!TEX root = ../document.tex
+
+
+\usepackage{graphicx}
+\graphicspath{{resource/image/}}
+\newcommand{\defaultFigureWidth}{\textwidth}
+
+%\usepackage[outdir=./]{epstopdf}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+\usetikzlibrary{shadows.blur}
+\usepackage{tikz-uml}
+\usepackage{tikz-3dplot}
+
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=newest}
+
+%\usetikzlibrary{external}
+%\tikzexternalize[prefix=resource/image/tikz/,optimize command away=\includepdf]
+
+% muss nach xcolor geladen werden
+% \usepackage{menukeys}
+
+
+
+% Farben der THI
+\definecolor{THIblue}{rgb}{0.0078,0.1176,0.4705}
+
+
+\tikzset{vertex/.style = {shape=circle,draw,minimum size=3em,color=THIblue,fill=white, align=center, line width = 1mm}}
+\tikzset{vertexlabel/.style = {draw,minimum size=1.5em, text width= 1.4cm, color=black!80, fill=white, align=center, thick, blur shadow}}
+\tikzset{edge/.style = {->,> = latex', ultra thick}}
+
+
+\definecolor{ResponseGray}{gray}{0.4}
+\definecolor{ResponseDarkGray}{gray}{0.25}
+\definecolor{ResponseOrange}{HTML}{FF9900}
+\definecolor{MarkerYellow}{HTML}{E4FC5B}
+\definecolor{titlepagecolor}{cmyk}{1,.60,0,.40}
+\definecolor{MyDarkBlue}{cmyk}{1,.60,0,.40}
+\definecolor{BrickRed}{HTML}{841F27}
+\definecolor{halfgray}{gray}{0.5}
+\definecolor{TableRuleColor}{HTML}{000000}
+\definecolor{MyMarginnoteColor}{gray}{0.2}

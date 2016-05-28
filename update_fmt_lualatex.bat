@@ -1,0 +1,1 @@
+luatex -ini -jobname="document" -shell-escape "&lualatex" mylatexformat.ltx document.tex

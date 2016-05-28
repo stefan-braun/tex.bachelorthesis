@@ -1,0 +1,338 @@
+%!TEX root = ../document.tex
+\chapter{Suchsysteme -- eine Marktübersicht}
+\label{ch:market}
+
+\section{SQL"=basierte Suche}
+
+Bereits das Vorgängersystem INsite verfügt über die Möglichkeit, nach Veranstaltungen zu suchen und nach auszuwählenden Kriterien zu filtern.\footnote{Vergleiche Abbildung \ref{fig:insite_screenshot_filter_original} aus dem Abschnitt \ref{sec:task}} Dies wird durch eine konfigurierbare und parametrisierbare SQL"=Abfrage realisiert.
+
+\subsection{Filterung}
+
+Beispielsweise wird der Filter \emph{Region} clientseitig durch eine Selectbox mit den Auswahlmöglichkeiten $\{alle, IN, EI, ND, ... \}$ umgesetzt. Hierbei verursacht $alle$ keine Filterung. Die weiteren Elemente stellen Abkürzungen für Regionen rund um den Raum Ingolstadt dar, nach welchen die Veranstaltungen entsprechend eingeschränkt werden können.\footnote{$IN$: Ingolstadt, $EI$: Eichstätt, $ND$: Neuburg an der Donau}
+
+\begin{listing}[ht!]
+\begin{margincap}
+\begin{minted}{cfs}
+<cfquery>
+SELECT
+	Veranstaltungen.*
+FROM
+	Veranstaltungen
+<cfif FORM.region is not 'alle'>
+WHERE
+	Veranstaltungen.region = <cfqueryparam value='#FORM.region#'>
+</cfif>
+</cfquery>
+\end{minted}
+\caption[Filterung nach Region]{Die Filterung nach Region wird nur durchgeführt, falls nicht $alle$ als Parameter über-\\geben wurde. }
+\label{lst:SQLFilter}
+\end{margincap}
+\end{listing}
+
+\texttt{FORM.region} stellt in Listing \ref{lst:SQLFilter} eine ColdFusion"=Variable dar, deren Wert aus dem entsprechenden HTML"=Suchformular stammt. Lediglich wenn an dieser Stelle nicht der String $alle$ übergeben wurde, wird die Filterung durchgeführt. In diesem Fall wird der SQL String um eine Einschränkung erweitert. \mintinline{cfs}{<cfqueryparam>} wird an dieser Stelle verwendet, um SQL"=Injections zu verhindern \cite[S. 171f]{Forta.2010} -- ähnlich wie beispielsweise \emph{Prepared Statements} in Java.\footnote{zur Erinnerung: INsite wurde unter Adobe ColdFusion entwickelt}
+
+\subsection{Suche mit LIKE"=Operator}
+\label{sec:search_sql_like}
+
+Ebenso wird mit dem optionalen Parameter \emph{Suchwort} verfahren. Im Vergleich zu obiger Filterung fallen jedoch zwei Unterschiede auf: Zum einen betrifft die Suche nicht notwendigerweise genau eine Spalte einer Datenbanktabelle. Wie Listing \ref{lst:SQLSearch} zeigt, soll nicht nur der Name einer Veranstaltung durchsucht werden, auch die Spalten \emph{Ort} und \emph{Beschreibung} sind Texte, welche den Suchbegriff enthalten können. Da eine Veranstaltung bereits als Suchtreffer gelten soll, wenn lediglich eine dieser Spalten zum Suchbegriff passt, werden die einzelnen Bedingungen per logischem Oder verknüpft. Der andere wesentliche Unterschied betrifft die Art der Einschränkung. Bei der Filterung nach einer Region wurde durch den \enquote{\mintinline{sql}{=}} Operator überprüft, ob der Wert der Spalte exakt mit dem übergebenem Wert übereinstimmt. Dies ist bei einer Suche im Allgemeinen nicht erwünscht.
+
+Stattdessen soll die Bedingung \emph{Spalte enthält Suchwort} realisiert werden. Dies geschieht in SQL mittels \mintinline{sql}{LIKE} Operator, welcher Wildcards unterstützt. Durch Einbettung des Suchbegriffes in \%-Zeichen wird eine \emph{enthält}-Bedingung erzeugt \cite[S. 110]{Wieken.2009}.
+
+
+\renewcommand{\arraystretch}{1.2}
+\arrayrulecolor{TableRuleColor}
+
+\begin{table}[ht!]
+\begin{margincap}
+\centering
+\begin{tabularx}{0.9\textwidth}{lll}
+ID & Name & Ort\\
+\hline
+1 & Stadtführung & Rathausplatz Ingolstadt \\
+2 & Mathematik-Prüfung & TH Ingolstadt \\
+3 & Stadtradeln & Ingolstadt \\
+4 & Dia-Vortrag von Prof. Dr. Mueller & Festsaal \\
+5 & Wanderung von Rom nach Florenz & Petersplatz, Rom\\
+\end{tabularx}
+\caption{Beispieldatensätze von Veranstaltungen}
+\label{tab:events.examples.sql}
+\end{margincap}
+\end{table}
+
+
+Wird eine Abfrage \mintinline{sql}{Veranstaltungen.ort = 'Ingolstadt'} auf die Tabelle \ref{tab:events.examples.sql} angewandt, so resultiert dies lediglich im Datensatz 3. Währenddessen liefert die Query \mintinline{sql}{Veranstaltungen.ort LIKE '%Ingolstadt%'} die Veranstaltungen 1, 2 und 3.
+
+Eine weitere Einschränkung liegt in der möglichen Case"=Sensitivität von Datenbanken. Möglich deshalb, da dies von der verwendeten \emph{Collation}\footnote{englisch für \enquote{Sortierreihenfolge}} der Datenbank abhängig ist. Diese gibt für eine Datenbank die Sortierreihenfolge von Inhalten vor und kann sich auch auf Einschränkungen wie den \mintinline{sql}{LIKE}-Operator auswirken. Ist die Collation von der Groß- und Kleinschreibung abhängig, so wird dies üblicherweise durch ein \emph{CS} im Namen gekennzeichnet. Andernfalls enthält der Name der Collation meist ein \emph{CI} \cite{Microsoft.2015} \cite[S. 185f]{Tahaghoghi.2006}. Für eine case"=sensitive Collation würde die Suchanfrage \mintinline{sql}{Veranstaltungen.ort} \mintinline{sql}{LIKE}\mintinline{sql}{ '%ingolstadt%'} keinen Treffer erzielen. Dies lässt sich durch Verwendung der SQL"=Funktion \mintinline{sql}{LOWER()} umgehen: Indem sowohl Suchbegriff als auch der Wert in der Spalte in Kleinbuchstaben umgewandelt werden, spielt die Case"=Sensitivität der Datenbank an dieser Stelle keine Rolle mehr.
+
+Die INsite Datenbank verwendet derzeit mit \emph{SQL\_Latin1\_General\_CP1\_CI\_AS} eine case"=insensitive Collation, somit musste die INsite Suchquery nicht entsprechend angepasst werden. In diesem Zusammenhang ist auch der Namensbestandteil \emph{\_AS} von Interesse: dieser kennzeichnet die Collation als unterscheidend zwischen Lettern mit und ohne Akzenten. Die Zeichen a und \'{a} sind somit für diese Collation nicht identisch. Das Gegenteil hierzu stellt in MSSQL \emph{\_AI} dar \cite{Microsoft.2015}.
+
+\begin{listing}[ht!]
+\begin{margincap}
+\begin{minted}{cfs}
+<cfquery>
+SELECT
+	Veranstaltungen.*
+FROM
+	Veranstaltungen
+WHERE
+	Veranstaltungen.freigabe = 1
+<cfif Len(FORM.search)>
+AND (
+		Veranstaltungen.name LIKE <cfqueryparam value='%#FORM.search#%'>
+	OR
+		Veranstaltungen.beschreibung LIKE <cfqueryparam value='%#FORM.search#%'>
+	OR
+		Veranstaltungen.ort LIKE <cfqueryparam value='%#FORM.search#%'>
+	)
+</cfif>
+</cfquery>
+\end{minted}
+\caption[Suche nach Veranstaltungen mittels SQL LIKE]{Veranstaltungen werden im Vorgängersystem INsite mittels \mintinline{sql}{LIKE} gefiltert.}
+\label{lst:SQLSearch}
+\end{margincap}
+\end{listing}
+
+Auch wenn die Suche nun nicht mehr von der Groß- und Kleinschreibung abhängig ist, werden dennoch nur solche Datensätze zur Treffermenge hinzugefügt, welche die einzelnen Zeichen des Suchbegriffes exakt in der angegeben Reihenfolge enthalten. Möchte ein Benutzer beispielsweise die Tabelle \ref{tab:events.examples.sql} nach Veranstaltungen an der \enquote{Technische[n] Hochschule Ingolstadt} durchsuchen, so wurde er mit dem bisherigen Verfahren keinen einzigen Treffer erzielen, da die Technische Hochschule zu TH abgekürzt wurde. Um trotzdem Suchtreffer zu erhalten, könnte der Suchbegriff vor der Konstruktion der SQL"=Abfrage nach Leerzeichen aufgetrennt werden. \enquote{Technische Hochschule Ingolstadt} wird hierdurch zu drei einzelnen Suchbegriffen $\{Technische, Hochschule, Ingolstadt \}$. Anschließend kann eine Suche nach jedem einzelnen Wort durchgeführt werden, beispielsweise durch eine \mintinline{sql}{OR}-Verknüpfung oder eine Mengenvereinigung mittels \mintinline{sql}{UNION}. Somit würde der Suchbegriff wieder zur Ergebnismenge $\{1, 2, 3\}$ führen, da diese drei Datensätze \enquote{Ingolstadt} enthalten. Auch der in erster Linie für die Suche relevante Datensatz mit der ID 2 wird als Suchtreffer aufgeführt \cite[S. 52]{Grainger.2014}.
+
+Eine solche Ausweitung der Suche bringt jedoch nicht nur Vorteile mit sich: Startet man mit diesem Verfahren eine Suchanfrage nach \enquote{Wilhelm von Humboldt}, so resultiert dies in den Ergebnissen $\{5,6\}$. Obwohl die Suchanfrage thematisch zu keiner der Veranstaltungen passt, enthalten diese beiden Datensätze ebenfalls das Wort \enquote{von}. Solche \emph{Stopwort} genannten Satzteile sind häufig auftretende Wörter einer Sprache, wie beispielsweise Artikel. Professionelle Suchsysteme verfügen meist über Listen dieser Stopwörter, welche bei einer Suchanfrage ignoriert werden \cite[S. 89]{Buttcher.2010}.
+
+\subsection{Eingebaute Volltextsuche}
+
+Diverse moderne relationale Datenbanksysteme verfügen über eine integrierte Volltextsuche -- so auch das derzeit in ReEvent verwendete RDBMS MySQL. Diese ist allerdings üblicherweise inaktiv und kann für eine oder mehrere Spalten einer Tabelle Volltextsuche aktiviert werden. Dies geschieht per \mintinline{sql}{FULLTEXT}-Anweisung \cite[S. 191]{Nixon.2014}.
+
+\begin{listing}[ht!]
+\begin{margincap}
+\begin{minted}{sql}
+ALTER TABLE event ADD FULLTEXT(name,description);
+\end{minted}
+\caption[FULLTEXT Index unter MySQL]{Anlegen eines \mintinline{sql}{FULLTEXT} Indexes unter MySQL}
+\label{lst:mysql_fulltext}
+\end{margincap}
+\end{listing}
+
+Anschließend können für die so indizierten Spalten Suchanfragen gestartet werden. Listing \ref{lst:mysql_fulltextsearch} zeigt die zugehörige Syntax: per \mintinline{sql}{MATCH} werden die zu durchsuchenden Spalten angegeben, die zuvor in Listing \ref{lst:mysql_fulltext} hierfür vorbereit wurden. \mintinline{sql}{AGAINST} enthält schließlich den Suchbegriff. Das optionale \mintinline{sql}{IN BOOLEAN MODE} ermöglicht es, die Suchumfrage um Operatoren wie $+$, $-$ oder $"$ zu erweitern. Ein Pluszeichen vor einem Begriff macht diesen erforderlich, ein Minuszeichen markiert einen Begriff als Ausschlusskriterium. Zusammengehörende Begriffe, welche von Anführungszeichen umgeben sind, werden in exakt dieser Reihenfolge als Phrase gesucht \cite[S. 197f]{Nixon.2014}. Neben der Unterstützung derartiger Operatoren nutzt die Volltextsuche auch Stopwortlisten \cite[S. 191]{Nixon.2014}.
+
+\begin{listing}[ht!]
+\begin{margincap}
+\begin{minted}{sql}
+SELECT * FROM event WHERE
+MATCH(name,description) AGAINST('suchbegriff' IN BOOLEAN MODE);
+\end{minted}
+\caption[Volltextsuche unter MySQL]{Durchführung einer Volltextsuche unter MySQL}
+\label{lst:mysql_fulltextsearch}
+\end{margincap}
+\end{listing}
+
+Die \mintinline{sql}{MATCH() AGAINST()} Anweisung berechnet für den Suchbegriff eine Punktzahl auf Basis der Inhalte der angegebenen Spalten. Ist der Wert ungleich Null, so liegt ein Treffer vor. Ein höherer Wert impliziert zudem einen Treffer, der besser zum Suchbegriff passt. Somit lassen sich die Ergebnisse hiernach absteigend sortieren.
+
+Für die integrierte Suche spricht -- ebenso wie für die einfachere Suche mittels \mintinline{sql}{LIKE} -- dass kein zusätzliches System installiert und konfiguriert werden muss.
+
+Ein Nachteil an der integrierten Volltextsuche ist die Tatsache, dass sie derzeit kein standardisiertes Verfahren darstellen -- andere RDBMS wie PostgreSQL oder MSSQL bieten ebenfalls Funktionen zur Volltextsuche an, nutzen aber nicht die identische Syntax wie MySQL \cite[S. 39-41]{Redmond.2012} \cite{Microsoft.2015b}. Entsprechend müsste für jedes Datenbanksystem, welches von der grundlegenden Applikation unterstützt werden sollte, eine angepasste Version der SQL"=Anfragen entwickelt werden.
+
+Ebenfalls erwähnenswert ist die Abhängigkeit von der verwendeten \emph{Storage Engine}. Die Storage Engine stellt einen Bestandteil von MySQL dar. Von ihr hängt ab, wie die Daten abgespeichert werden und ob bestimmte Funktionen der Datenbank unterstützt werden -- wie auch Transaktionen \cite{OracleCorporationandoritsaffiliates.2015b}. Unter anderem unterstützt nicht jede MySQL Storage Engine Volltextsuche. Bis zur Version 5.5 von MySQL konnte die InnoDB Engine -- im Gegensatz zur damals als Standard verwendeten MYISAM -- keine Volltextsuche durchführen. InnoDB stellt allerdings die Engine der Wahl für den vom Flow"=Framework genutzten objektrelationalen Mapper Doctrine dar. Seit MySQL 5.6 wurde InnoDB zum Standard und unterstützt nun auch Volltextsuche \cite[S.191]{Nixon.2014}.
+
+
+\subsection{Levenshtein-Distanz}
+
+Die Levenshtein-Distanz ist eine Metrik, die eine Aussage über die Ähnlichkeit zweier Zeichenketten zueinander trifft. Sie gibt an, wie viele einzelne Buchstaben des einen Strings ersetzt, ergänzt oder entfernt werden müssen um den zweiten String zu erhalten. Jede derartige Änderung bedeutet eine um Eins erhöhte Levenshtein-Distanz. Eine geringere Levenshtein-Distanz weist darum auf eine höheren Grad der Ähnlichkeit hin.
+
+\texttt{
+	Fels $\rightarrow$ Feld $\rightarrow$ Geld $\rightarrow$ Gold
+}
+
+Da genau drei Änderungen notwendig sind, gilt $levenshtein('Fels',\,'Gold') = 3$.
+
+Aufgrund des Vorgehens dürfte die Levenshtein-Distanz bei leichten Rechtschreibfehlern und insbesondere Tippfehlern sehr verzeihend wirken.
+
+$levenshtein('Fischerfest',\,'Ficherfest') = 1$ weist für diesen Fall nur eine minimale Distanz auf, während der \mintinline{sql}{LIKE}-Operator aus Abschnitt \ref{sec:search_sql_like} hierbei scheitern würde.
+
+Andererseits verhält sich Levenshtein bei \emph{Text enthält Suchwort} weniger optimal.
+\begin{equation}
+\begin{aligned}
+	levenshtein('Hund',\,'Buch') & = 3 \\
+	levenshtein('Hund',\,'Hundehalsband') & = 9
+\end{aligned}
+\end{equation}
+
+\enquote{Buch} wird in diesem Fall eine höhere Ähnlichkeit zugesprochen als \enquote{Hundehalsband}, hier würde ein Vergleich mittels \mintinline{sql}{LIKE} nur das \enquote{Hundehalsband} finden.
+
+
+Während PostgreSQL die Levenshtein-Distanz bereits eingebaut hat \cite[S. 38]{Redmond.2012}, könnte sie in anderen RDBMS als \emph{User Defined Function} nachträglich integriert werden. Es bleibt jedoch die Frage, ob die Performanz einer UDF mit einer eingebauten Funktion mithalten kann.
+
+Gegebenenfalls müssen die Zeichenketten wie bereits in Abschnitt \ref{sec:search_sql_like} mittels \mintinline{sql}{LOWER()} auf Kleinbuchstaben reduziert werden, falls gewünscht ist, dass $levenshtein('T',\,'t') = 0$ gilt \cite[S. 38]{Redmond.2012}.
+
+
+\subsection{N-Gramme}
+
+Ein N-Gramm einer Zeichenkette ist die Menge aller möglichen Teilzeichenketten der Länge $n$. Ein Trigramm von \enquote{Ingolstadt} wäre
+
+\begin{equation}
+trigram('Ingolstadt') = \{\_in, ing, ngo, gol, ols, lst, sta, tad, adt, dt\_\}
+\end{equation}
+
+Hierbei entspricht $\_$ dem Beginn oder Ende eines Wortes \cite[S. 92f]{Buttcher.2010}. Bei einer Suche wird nun sowohl vom Suchbegriff als auch vom zu testenden Text ein Trigramm erstellt. Anschließend wird überprüft, welche Mächtigkeit die Schnittmenge der beiden Trigramme hat -- je größer der Wert umso ähnlicher sind sich die beiden Zeichenketten.
+
+\begin{equation}
+\begin{aligned}
+trigram('Inglstadt\,Fest') = \\ \{\_in, ing, ngl, gls, lst, sta, tad, adt, dt\_, \_Fes, est, st\_\}
+\end{aligned}
+\end{equation}
+Die Zeichenkette \enquote{Inglstadt Fest} weist sowohl einen Tippfehler als auch ein zusätzliches Wort auf.
+
+\begin{equation}
+\left\vert{trigram('Inglstadt\,Fest') \cap trigram('Ingolstadt')}\right\vert = 7
+\end{equation}
+
+PostgreSQL bietet hierfür die Funktion \mintinline{sql}{similarity(text, text)} an, welche auf Basis von Trigrammen einen Wert zwischen 0 und 1 berechnet, wobei 1 bedeutet, dass die beiden Mengen identisch sind. Auch MySQL bietet N-Gramme an \cite{OracleCorporationandoritsaffiliates.2015}.
+
+Während in diesem Abschnitt nur N-Gramme von der Länge drei behandelt wurden(Trigramme), funktioniert das Prinzip auch mit anderen Substringlängen. Laut \cite[S. 95]{Buttcher.2010} sind manche Werte für $N$ für bestimmte Sprachen besser geeignet als andere. Für die deutsche Sprache würden so Pentagramme\footnote{N-Gramme der Länge fünf} das Optimum darstellen.
+
+\section{Suchsysteme als lokale Anwendung}
+\label{sec:market_solr}
+
+Neben der einfachen Textsuche, welche auf Basis von SQL im Abschnitt \ref{sec:search_sql_like} vorgestellt wurde, existieren auch weitere Softwareprodukte, die es im Gegensatz zu relationalen Datenbanken zur primären Aufgabe haben, eine Volltextsuche zu ermöglichen. Diese \emph{Search Engines} lassen sich in verschiedene Gruppen unterteilen, beispielsweise in solche, die als zusätzliche Anwendung lokal eingerichtet werden. Vertreter hiervon sind Apache Solr und Elasticsearch, beides Search Engines auf Basis der Java"=Bibliothek Apache Lucene.
+
+Lucene wird von diesen Systemen unter anderem dazu genutzt, einen \emph{Inverted Index} für die Textsuche aufzubauen \cite[S. 11]{Grainger.2014}. Dieser Index basiert grundlegend auf den einzelnen \emph{Dokumenten}, welche durchsucht werden sollen. Ein Dokument enthält einen oder mehrere zusammengehörige Texte, welche sich wiederum aus einzelnen Wörtern zusammensetzen. Im Kontext von ReEvent könnte die Summe aus Name, Ort, Beschreibung und Kategorie einer Veranstaltung ein Dokument darstellen.
+
+\renewcommand{\arraystretch}{1.2}
+\arrayrulecolor{TableRuleColor}
+\begin{table}[ht]
+\begin{margincap}
+\centering
+\begin{tabularx}{0.6\textwidth}{l|X}
+ID & Inhalt \\
+\hline
+1 & Neuburger Schlossfest \\
+2 & Ein Sommernachtstraum \\
+3 & Freyunger Schlossfest \\
+4 & Rost auf Stahl - Bleistift auf Papier \\
+5 & Büchereizeit: Ein Weihnachtsengelbesuch \\
+6 & Technikgeschichte auf Papier \\
+7 & Büchereizeit: Unterwegs auf großer Fahrt \\
+\end{tabularx}
+\caption[Beispieldokumente für einen Inverted Index]{Beispieldokumente für einen Inverted Index}
+\label{tab:lucene_documents_example}
+\end{margincap}
+\end{table}
+
+\renewcommand{\arraystretch}{1.2}
+\arrayrulecolor{TableRuleColor}
+\begin{table}[ht!]
+\begin{margincap}
+\begin{subtable}[c]{0.45\textwidth}
+\begin{tabularx}{\textwidth}{l|l}
+Wort & Dokument"=ID \\
+\hline
+\lfstyle
+auf & \textlf{4;6;7 } \\
+Bleistift & \textlf{4} \\
+Büchereizeit & \textlf{5;7 } \\
+ein & \textlf{2;5 } \\
+Fahrt & \textlf{7   } \\
+Freyunger & \textlf{3  } \\
+großer & \textlf{7  } \\
+Neuburger & \textlf{1  } \\
+\end{tabularx}
+\end{subtable}
+\begin{subtable}[c]{0.52\textwidth}
+\begin{tabularx}{\textwidth}{l|l}
+Wort & Dokument"=ID \\
+\hline
+... & \textlf{...} \\
+Papier & \textlf{4;6 } \\
+Rost & \textlf{4 } \\
+Schlossfest & \textlf{1;3 } \\
+Sommernachtstraum & \textlf{2  } \\
+Stahl & \textlf{4 } \\
+Technikgeschichte & \textlf{6 } \\
+Weihnachtsengelbesuch & \textlf{5 } \\
+\end{tabularx}
+\end{subtable}
+\caption[Beispiel eines Inverted Index]{Beispiel eines Inverted Index auf Basis der Dokumente aus Tabelle \ref{tab:lucene_documents_example} nach \cite[S. 54]{Grainger.2014}. Jedes Wort zeigt auf eine Liste von Dokumenten"=IDs, jedes der darüber referenzierten Dokumente enthält dieses Wort.}
+\label{tab:lucene_index_example}
+\end{margincap}
+\end{table}
+
+Tabelle \ref{tab:lucene_documents_example} zeigt eine Reihe von Dokumenten, welche mit einer eindeutigen, numerischen ID versehen sind. Einen Inverted Index hierzu zeigt Tabelle \ref{tab:lucene_index_example}. Zu jedem Wort aus den Dokumenten wird aufgelistet, in welchen Dokumenten es enthalten ist. Zudem werden die einzelnen Wörter alphabetisch aufsteigend sortiert \cite[S. 54]{Grainger.2014}. Dadurch wird beispielsweise die Suche nach einem einzelnen Wort stark vereinfacht. Um alle Dokumente zum Suchbegriff \enquote{Schlossfest} zu finden, muss die Wort"=Spalte von Tabelle \ref{tab:lucene_index_example} überprüft werden. Enthält diese den Begriff, so kann über die Dokument"=ID"=Spalte auf entsprechende Dokumente geschlossen werden. Die Erstellung dieses Indexes für eine Menge an Dokumenten -- und die Durchführung weiterer zugehöriger Aufgaben -- wird \emph{Indizierung} genannt.
+
+Auch die Volltextsuche in MySQL, beziehungsweise der \mintinline{sql}{FULLTEXT}-Index basieren auf einem Inverted Index \cite{OracleCorporationandoritsaffiliates.2015c}.
+
+Die Umsetzung von booleschen Verknüpfungen kann über den Index realisiert werden: Für eine Anfrage \enquote{Papier AND Rost} wird zuerst der Index nach den beiden Einzelbegriffen durchsucht. Die beiden Ergebnismengen $\{4;6\}$ und $\{4\}$ können anschließend über Mengenoperatoren verknüpft werden, für \texttt{AND} ist dies die Schnittmenge \cite[S. 58]{Grainger.2014}.
+
+\begin{equation}
+	\{4;6\} \cap \{4\} = \{4\}
+\end{equation}
+
+Indizierung von Dokumenten und Suche können unter Apache Solr über HTTP"=Anfragen durchgeführt werden.
+
+
+\begin{listing}
+\begin{minted}[breaklines]{json}
+[
+ {
+  "id" : "123456",
+  "title" : "Sitzung des Stadtrates",
+  "description" : "zum Thema Solarbeleuchtung für Ingolstadt",
+  "venue" : "Neues Rathaus"
+ }
+]
+\end{minted}
+\caption{JSON-Dokument für die Indizierung in Solr}
+\label{lst:json_for_solr}
+\end{listing}
+
+Führt man einen HTTP POST an die URL \url{http://<solr_server>/solr/<core>/update} mit den Daten aus Listing \ref{lst:json_for_solr} durch, so wird dieses Dokument zur angegeben \texttt{<core>} hinzugefügt \cite[S. 142]{Grainger.2014}. Ein Core entspricht einer Menge von gleichartigen Dokumenten -- beispielsweise Veranstaltungen. Welche Eigenschaften Dokumente eines Cores haben -- etwa Datentypen -- wird in einer Datei namens \emph{schema.xml} definiert. Dies ist notwendig, da Solr für unterschiedliche Datentypen andere Analysevorgänge durchführen muss \cite[S. 125]{Grainger.2014}. \texttt{id} kommt hierbei eine Sonderrolle zu: Das Feld stellt einen eindeutigen Schlüssel dar, welchem dieses Dokument zugeordnet ist. Weitere Anfragen oder Änderungen werden über diesen Identifier aufgelöst \cite[S. 122f]{Grainger.2014}.
+
+Eine Suche kann per GET"=Request \url{http://<solr_server>/solr/<core>/select} gestartet werden. Suchparameter werden als GET"=Parameter angefügt. Neben dem eigentlichen Suchbegriff können etwa Filterung, Sortierreihenfolge und eine Submenge der Ergebnisliste\footnote{für das Paging} angegeben werden \cite[S. 36f]{Grainger.2014}. Als Antwort erhält man erneut ein JSON"=Dokument\footnote{falls als GET"=Parameter angegeben, kann die Trefferliste auch in anderen Formaten wie XML angefordert werden}, in welchem unter anderem die Treffer aufgelistet sind.
+
+\section{Google Seach Appliance}
+\label{sec:market_google_search_app}
+
+Wie bereits in Abschnitt \ref{sec:requirements_existing} dargestellt, ist Google ein Marktführer im Bereich der Websuche. In Form der \emph{Google Search Appliance} ist es möglich, die grundlegende Suchfunktionalität der Google-Suche für eigene Applikationen zu nutzen. Die Appliance wird als physischer Server geliefert und im lokalen Netzwerk installiert \cite{Google.2015b}.
+
+Anders als beispielsweise bei Apache Solr kommen auf den Betreiber der GSA zusätzliche Gebühren zu: In Abhängigkeit von der Anzahl der indizierten Dokumente verlangt Google einen Mietpreis. Derzeit\footnote{Stand 13.12.2015} bietet Google zwei verschiedene Versionen der Appliance an, wovon eine für bis zu 20 Millionen und die andere für bis zu 100 Million Dokumente ausgelegt ist \cite{Google.2015b}.
+
+Einen weitere Unterschied zu Apache Solr stellt der Ablauf der Indizierung dar: In einer Administrationsoberfläche der Google Search Appliance werden hierbei verschiedene Quellen eingetragen, welche die GSA anschließend regelmäßig \emph{aktiv} neu indiziert(Crawling). URLs oder Datenbank-Queries stellen hierbei mögliche Arten von Quellen dar \cite[S. 17, 26]{Google.2012}.
+
+Mehrfache Anfragen an den GSA-Kundensupport bezüglich Kosten, Vertragsmodalitäten und Testgeräte verliefen im Sande oder sind zum aktuellen Zeitpunkt unbeantwortet. Dementsprechend kann hierzu keine Aussage getroffen werden. In einem von Google bereitgestellten Marketing-Dokument wird die GSA in einer Kostenkalkulation mit \numprint{45000}\,\$ pro Jahr angesetzt \cite{Google.2013}. Neben den -- im Vergleich zu den zuvor vorgestellten Lösungen -- hohen Kosten spricht somit auch der Eindruck eines begrenzt hilfreichen Kundensupports gegen den Einsatz der GSA.
+
+\section{Google Site Search}
+\label{sec:market_google_site}
+Neben der professionellen Search Appliance bietet Google auch noch eine andere Möglichkeit, eine Suche über Dokumente einer bestimmten Domain zu realisieren. Bereits die Google-Websuche erlaubt es, Suchergebnisse entsprechend einzugrenzen. Hierzu wird zusätzlich zu weiteren Suchbegriffen die gewünschte Domain mit dem Parameter \texttt{site:} angegeben.
+
+
+\begin{listing}[ht!]
+\begin{minted}[breaklines]{text}
+site:www.thi.de VPN
+\end{minted}
+\caption[Google-Websuche mit site-Parameter]{Google-Websuche mit site-Parameter, der die Suche auf die Website \url{www.thi.de} einschränkt}
+\label{lst:google_site_search_param}
+\end{listing}
+
+Google ermöglicht es, eine für eine Domain spezifische Suche in die eigene Webseite einzubinden. Im entsprechenden Online-Portal der \emph{Google Site Search}\footnote{siehe \url{https://cse.google.com/}} kann eine solche \enquote{Suchmaschine} konfiguriert werden. Im Anschluss daran generiert das Portal ein Javascript-Snippet, welches beim Laden einer Webseite automatisch ausgeführt wird und ein Suchformular einbindet. Suchergebnisse werden hierbei in einem Popup-artigen Overlay-Kontainer angezeigt.
+
+In der Grundversion ist dieses Angebot kostenlos, jedoch werden zu Suchtreffern auch stets Werbeanzeigen mit angezeigt. Gegen Entrichtung einer jährlichen Gebühr -- welche abhängig von der Anzahl der Suchanfragen ist -- entfällt die Werbeeinblendung. Für \numprint{20000} Anfragen innerhalb eines Jahres setzt Google einen Betrag von \numprint{100}\,\$ an \cite{Google.2015}.
+
+Der Vorteil liegt hierbei darin, dass das Suchsystem nicht selbst gehostet werden muss, da sowohl Indizierung als auch alle Suchanfragen von Google-Servern durchgeführt werden. Viele gleichzeitige Suchanfragen -- welche üblicherweise den eigenen Server auslasten würden -- können somit von der Infrastruktur des Suchmaschinenanbieters verarbeitet werden.
+
+Allerdings kann die Site Search nur Dokumente durchsuchen, welche aus Sicht des Google-Servers auch öffentlich erreichbar sind. Sind Veranstaltungen beispielsweise noch nicht veröffentlicht worden\footnote{Workspaces} oder werden bestimmte Veranstaltungen nur per zugriffsgeschützten Webservice ausgeliefert, so können diese nicht von der Suche erfasst werden. Eine weitere Einschränkung könnte die robots.txt Datei darstellen, welche das Indizieren für einzelne Pfade des Webservers verbieten könnte.
+
+Während das Suchformular und die Trefferliste größtenteils durch CSS anpassbar sind, verpflichtet man sich bei Akzeptierung der Nutzungsbedingungen dazu, ein Google-Logo neben dem Suchfeld einzubinden und dieses auf eine von Google vorgegebene URL zu verlinken \cite[2.1]{Google.2011}.
+
+\section{Clouddienste mit Suchfunktionalität}
+\label{sec_cloud_search}
+Die letzte der hier vorgestellten Gruppen von Suchsystemen ist die der Cloudbasierten, bei denen der Suchserver in einem externen Rechenzentrum gehostet wird. Zwei Vertreter dieser Gruppe sind \emph{Amazon CloudSearch} und \emph{Microsoft Azure Search.}
+
+Wie auch bereits bei der Google Site Search befindet sich somit das Suchsystem nicht im lokalen Netz, entsprechend müssen Server und Software nicht selbst gewartet werden. Von einem lokalen Suchsystem unterscheidet sich ein Cloud-Suchdienst auch dahingehend, dass die Daten \emph{aktiv} einem Dritten übergeben werden -- in Zeiten von Überwachungsskandalen und politischer Einflussnahme auf Hosting-Betreiber ein nicht unbedeutender Punkt. Hierbei muss jedoch bedacht werden, dass ReEvent im Betrieb der Stadt Ingolstadt vermutlich nur einen geringen Teil sensibler Daten aufnehmen wird.
+
+Ein weiterer, gravierender Unterschied zu Apache Solr und ähnlichen Suchsystem liegt darin, dass Clouddienste üblicherweise gemietet werden. Hierbei wird allerdings kein jährlicher, fester Betrag fällig: Die Gebühren berechnen sich anhand der Nutzung. Beim cloudbasierten Suchdienst von Amazon setzen sich die Kosten wie folgt zusammen:\footnote{vergleiche \url{https://aws.amazon.com/de/cloudsearch/pricing/}, Stand 01.01.2016, alle Preisangaben zuzüglich Steuern und in Bezug auf die Region \enquote{EU (Frankfurt)}}
+
+\begin{itemize}
+	\item 0,112\,\$ pro angefangene Stunde für eine \emph{search.m3.medium} Instanz
+	\item 0,1\,\$ pro \numprint{1000} Indizierungsanforderungen von je max. 5 MB
+	\item 0,09\,\$ pro TB ausgehender Daten\footnote{für die ersten 10 TB}
+\end{itemize}
+
+Vorteilhaft an Cloud-Diensten ist vor allem die Möglichkeit, die gemieteten Recheneinheiten je nach Bedarf vertikal skalieren zu können. So können insbesondere Lastspitzen -- möglicherweise bei Veranstaltungen mit großem Publikum -- abgefangen werden, ohne den Rest des Jahres teure und leistungsstarke Hardware nahezu ungenutzt zu lassen.
+
+Unter Amazon Cloudsearch erfolgt die Suche und Indizierung ähnlich wie bei Apache Solr über eine Webservice-Schnittstelle \cite[S. 12f, 223]{AmazonWebServices.2015}.

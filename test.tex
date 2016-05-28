@@ -1,0 +1,46 @@
+% !TEX TS-program = lualatex
+\documentclass{tufte-handout}
+
+\usepackage[ngerman]{babel}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{fontspec}
+
+\newcommand\mytodo[1]{
+  \marginnote{% needs marginnote package
+    \vspace{0pt}
+    \lineskiplimit=-\maxdimen%
+    \normalfont\sffamily\scriptsize%
+    \noindent
+    \fcolorbox{orange}{orange} {\parbox{\marginparwidth}{\color{white}\bfseries TODO}}%
+    \vspace{4pt}
+    \\\noindent
+    \fcolorbox{orange}{white}{\parbox[t]{\marginparwidth}{#1}}
+    }%
+}
+
+%\setmainfont{NexusSerif-Regular}
+\setmainfont{MinionPro}
+\setsansfont{MyriadPro}
+
+\title{Vorlesungsskript zu einem vollkommen nutzlosen Fach}
+\date{\today} % without \date command, current date is supplied
+
+\begin{document}
+
+\maketitle% this prints the handout title, author, and date
+
+\begin{abstract}
+\noindent
+In dieser Vorlesung geht es um dieses und jenes. Außerdem werden unterschiedliche Themen wie X und Y behandelt und vertieft. Hierbei wird Grundwissen aus dem Kurs Z benötigt -- sonst brauchst du garnicht erst antreten. Q \$ ILK IJK P C A W 4
+\end{abstract}
+
+\section*{Organisatorisches}
+\marginnote{26.01.2016}
+\mytodo{Denk dran dies und das zu machen. Ausserdem sollte ich auch noch an XYZ denken. Ausserdem sollte ich auch noch an XYZ denken. Ausserdem sollte ich auch noch an XYZ denken.}
+\mytodo{Denk dran dies und das zu machen. Ausserdem sollte ich auch noch an XYZ denken. Ausserdem sollte ich auch noch an XYZ denken. Ausserdem sollte ich auch noch an XYZ denken.}
+
+In dieser Vorlesung geht es um dieses und jenes. Außerdem werden unterschiedliche Themen wie X und Y behandelt und vertieft. Hierbei wird Grundwissen aus dem Kurs Z benötigt -- sonst brauchst du garnicht erst antreten. Q \$ ILK IJK P C A W 4
+
+
+\end{document}

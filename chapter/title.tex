@@ -1,0 +1,24 @@
+%!TEX root = ../document.tex
+
+\definecolor{namecolor}{cmyk}{1,.50,0,.10}
+
+\backgroundsetup{
+scale=1,
+angle=0,
+opacity=1,
+contents={\begin{tikzpicture}[remember picture,overlay]
+ \path [fill=titlepagecolor] (current page.west)rectangle (current page.north east);
+ \draw [color=white, line width=7pt] (6.5,0)--(6.5,0.5\paperheight);
+\end{tikzpicture}}
+}
+
+\makeatletter
+\def\printauthor{
+	{\Large \@author}}
+\makeatother
+
+\author{
+	\textcolor{black}{{\textsf{von}}} \\
+	\textcolor{black}{{\textsf{Stefan Braun}}} \\
+	\texttt{stefan.braun@respon.se} \\
+}

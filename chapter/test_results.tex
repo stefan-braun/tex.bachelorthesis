@@ -1,0 +1,68 @@
+%!TEX root = ../document.tex
+\chapter{Testergebnisse}
+\label{ch:test_reults}
+
+
+\renewcommand{\arraystretch}{1.2}
+\arrayrulecolor{TableRuleColor}
+\begin{table}[ht!]
+\centering
+\begin{tabular}{l | c | lllll}
+Test & $\beta$ & Solr & Volltext & CloudSearch & LIKE &  Trigramme \\
+\hline
+\# 1 Volltextsuche – Effektivität & 5 & 0,38 & 0,4 & 0,4 & 0,59 & 0,46 \\
+\# 2 Volltextsuche – Durchsatz & 2 & 0,33 & 1 & 0,11 & 0,26 & 0,01 \\
+\# 3 Volltextsuche – Latenz & 3 & 0,9 & 0,9 & 0,7 & 0,8 & 0 \\
+\# 4 Filterung nach Datum & 2 & 1 & 1 & 1 & 1 & 1 \\
+\# 5 Filterung nach numerischer ID & 2 & 1 & 1 & 1 & 1 & 1 \\
+\# 6 Umkreissuche & 1 & 1 & 0 & 1 & 0 & 0 \\
+\# 7 Indizierungsgeschwindigkeit & 1 & 1 & 1 & 0 & 1 & 1 \\
+\# 8 Mehrsprachige Inhalte & 1 & 1 & 0,95 & 1 & 1 & 1 \\
+\# 9 Rechtschreibkorrektur & 2 & 0,78 & 0,17 & 0,9 & 0 & 0,97 \\
+\# 10 Durchsuchung von Dateien & 1 & 0 & 0 & 0 & 0 & 0 \\
+\# 11 Jährliche Kosten & 2 & 1 & 1 & 0,7 & 1 & 1 \\
+\# 12 Suchbegriff-Highlighting & 1 & 1 & 1 & 1 & 0 & 0 \\
+\# 13 Wildcards-Unterstützung & 0,2 & 1 & 0 & 0 & 1 & 0 \\
+\# 14 Boolesche Operatoren & 0,2 & 1 & 1 & 1 & 0 & 0 \\
+\hline
+\hline
+Summe & 23,4 & 17,42 & 15,99 & 14,72 & 14,07 & 12,26 \\
+Platzierung &  & 1 & 2 & 3 & 4 & 5
+
+\end{tabular}
+\caption[Testresultate]{Resultate der Tests aus Anhang \ref{ch:test_Definition}. Volltext, LIKE und Trigramme beziehen sich auf die jeweiligen Suchfunktionen in PostgreSQL.}
+\label{tab:testresults}
+\end{table}
+
+
+\renewcommand{\arraystretch}{1.2}
+\arrayrulecolor{TableRuleColor}
+\begin{table}[ht!]
+\begin{subtable}[c]{0.45\textwidth}
+\begin{tabular}{l | rr}
+ & recall & precision \\
+\hline
+LIKE & 0,5 & 0,73 \\
+Trigramme & 0,375 & 0,6 \\
+Volltext & 0,25 & 1 \\
+Solr & 0,25 & 0,8 \\
+CloudSearch & 0,25 & 1 \\
+\end{tabular}
+\caption[Recall und Precision]{Recall und Precision}
+\label{tab:rec_prec}
+\end{subtable}
+\begin{subtable}[c]{0.45\textwidth}
+\begin{tabular}{l | rr}
+ &  Latenz in $s$ & Durchsatz in $\frac{Anfragen}{s}$ \\
+\hline
+LIKE & 0,50 & 55,4 \\
+Trigramme & 12,74 & 1,97 \\
+Volltext & 0,32 & 212,3 \\
+Solr & 0,31 & 69,3 \\
+CloudSearch & 0,61 & 23,4 \\
+\end{tabular}
+\caption[Latenz und Durchsatz]{Latenz und Durchsatz}
+\label{tab:latency_through}
+\end{subtable}
+\caption{Messwerte bei einzelnen Tests}
+\end{table}

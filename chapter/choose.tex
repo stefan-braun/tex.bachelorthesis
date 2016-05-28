@@ -1,0 +1,40 @@
+%!TEX root = ../document.tex
+\chapter{Vorauswahl der zu evaluierenden Systeme}
+\label{ch:choose}
+
+Im Kapitel \ref{ch:market} wurden insgesamt zehn verschiedene Ansätze zur Suche aufgezeigt. Ein Vergleich all dieser Systeme würde den Rahmen dieser Arbeit sprengen. Aus diesem Grund wird eine begründete Vorauswahl von möglichen Lösungen getroffen, welche im späteren Verlauf der Arbeit evaluiert werden sollen.
+
+Die Tests in Kapitel \ref{ch:eval} sollen aber prinzipiell so ausgelegt sein, dass -- falls notwendig -- weitere Durchläufe mit den hier ausgegrenzten Suchsysteme möglich sind und die entstanden Ergebnisse untereinander vergleichbar sind.
+% TODO Ranking http://db-engines.com/en/ranking/search+engine
+
+
+\paragraph{Apache Solr und ElasticSearch}
+Beide sind unter der Apache License 2.0 stehende freie Search Engines -- und beide basieren auf der Java-Bibliothek Apache Lucene. Davon ausgehend wird angenommen, dass hinsichtlich der Anforderungen aus Kapitel \ref{ch:requirements} beide ähnliche Resultate erzielen würden. Die Tatsache, dass die Anwendung bereits von response verwendet wurde gibt schließlich den Ausschlag für Apache Solr.
+
+\paragraph{Levenshtein und Trigramme}
+Zusammen mit dem \mintinline{sql}{LIKE}"=Operator stellen Levenshtein und Trigramme vergleichsweise simple Ansätze zur Suche dar. In Hinblick auf die in Kapitel \ref{ch:market} dargestellten Einschränkungen von \mintinline{sql}{LIKE} und Levenshtein wird der Trigramm-basierte Vergleich als Vertreter dieser Gruppe ausgewählt. Um jedoch den Wert einer Volltextsuche ermessen zu können, werden die hier dargestellten Suchsysteme mit der \mintinline{sql}{LIKE}-basierten Suche aus INsite verglichen.
+
+\paragraph{Eingebaute Volltextsuche von RDBMS}
+Ähnlich wie bereits bei Apache Solr und ElasticSearch liegen verschiedene Datenbanksysteme vor, die über eine eingebaute Volltextsuche verfügen. Kandidaten sind hierbei PostgreSQL, MSSQL und das vorgestellte MySQL. Um Synergieeffekte bezüglich dem vorherigen Absatz zu nutzen und da die MySQL-Volltextsuche laut \cite{Belaid.2015} vergleichsweise limitiert in ihrem Funktionsumfang sei, wird die Volltextsuche von PostgreSQL genutzt.
+
+
+\paragraph{Google Search Appliance}
+Wenn auch ein interessantes Konzept, so kann die GSA nicht die Evaluation mit einbezogen werden, da zum momentanen Zeitpunkt kein Testgerät vorliegt. Zudem dürften die Kosten -- die wie in Abschnitt \ref{sec:market_google_search_app} dargestellt im fünf- bis sechsstelligen Bereich liegen könnten -- den Kostenrahmen des Projektes übersteigen. Lediglich für den Fall, dass die Stadt Ingolstadt in Zukunft eine zentrale Suchlösung benötigen sollte, könnte man die Google Search Appliance erneut als mögliche Lösung ins Auge fassen -- inklusive der Einbindung von ReEvent.
+
+\paragraph{Google Site Search}
+Gegen die Google Site Search spricht, dass nur öffentlich zugängliche Daten durchsucht werden können. Insbesondere die Workspaces aus Abschnitt \ref{sec:workspaces} oder der angedachte Review-Prozess für die Veröffentlichung externer Veranstaltungen werden somit konstruktionsbedingt nicht von der Suche erfasst.
+
+\paragraph{Cloudbasierte Suchsysteme}
+Im Abschnitt \ref{sec_cloud_search} wurde die cloudbasierte Suche von \emph{Amazon CloudSearch} und \emph{Microsoft Azure Search} vorgestellt. Ähnlich wie bei Apache Solr fällt die Entscheidung für das Cloud"=Angebot von Amazon, da hierfür bei response bereits ein registriertes Konto vorliegt.
+
+\section{Auflistung der zu evaluierenden Suchlösungen}
+
+Folgende Suchlösungen werden daher in die Evaluation mit einbezogen.
+
+\begin{itemize}
+	\item Apache Solr
+	\item PostgreSQL -- \mintinline{sql}{LIKE}
+	\item PostgreSQL -- Trigramme
+	\item PostgreSQL -- Volltextsuche
+	\item Amazon CloudSearch
+\end{itemize}

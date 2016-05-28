@@ -1,0 +1,131 @@
+%!TEX root = ../document.tex
+
+\chapter{Polyglotter Ansatz mit neo4j}
+\label{ch:polyglott}
+
+Seit einiger Zeit konkurrieren neue Arten von Datenhaltungssystemen mit den althergebrachten relationalen Datenbanken. Die sogenannten \emph{NoSQL}-Datenbanken -- was je nach Quelle als \enquote{No SQL}\footnote{englisch: kein SQL} oder \enquote{Not only SQL}\footnote{englisch: nicht nur SQL} interpretiert wird -- speichern Daten üblicherweise nicht in der von relationalen Datenbanken gewohnten zeilenorientierten Tabellenstruktur ab. Stattdessen kristallisierten sich verschiedene Typen von NoSQL-Datenbanken heraus. So gibt es Key-Value-Datenbanken, Spaltenorientierte, Dokumentenorientierte und auch Graphdatenbanken \cite[S. 307-310]{Redmond.2012}. Auch ein Suchserver wie Apache Solr wird als NoSQL bezeichnet \cite[S. 4]{Grainger.2014}.
+
+Eine jede dieser Gruppen hat ihr Anwendungsgebiet. Andererseits gibt es Fälle, in welchen ein bestimmter Typ von NoSQL-Lösung falsch am Platz ist. So eignet sich etwa ein Key-Value Speicher weniger für stark mit einander verknüpfte Datensätze \cite[S. 308]{Redmond.2012}, auch ein Suchserver dürfte als primäre Datenhaltung für eine Lagerverwaltung die falsche Wahl sein. Daher gilt es beim Einsatz von NoSQL-Produkten die zu den Anforderungen passende Lösung zu bestimmen.
+
+Bei der Entwicklung einer \emph{polyglotten} Persistenz wird diese Eigenschaft von NoSQL"=Datenbanken beachtet: Anstatt nur eine einzige Datenbank für jedwede Speicherung von Daten zu verwenden, wird für unterschiedliche Teilbereiche des entstehenden Systems eine \emph{passende} Datenbanklösung gewählt \cite[S. 292]{Redmond.2012}. Genau genommen stellt die Kombination aus RDBMS und Search Engine in ReEvent bereits ein polyglottes System dar. Denn für Volltextsuche ist eine relationale Datenbank nicht in erster Linie ausgelegt, eine eigens für diesen Zweck entwickelte Search Engine jedoch sehr wohl. Dieses Kapitel soll Ansätze zeigen, wie die Graphdatenbank neo4j für die Suche nach Veranstaltungen verwendet werden kann.
+
+Im Zusammenhang der Evaluation erfolgt dies gewissermaßen \enquote{außer Konkurrenz}, die in diesem Kapitel beschriebenen Inhalte können eine herkömmliche Suchlösung zwar ergänzen aber nicht ersetzen.
+
+\section{Empfehlung auf Grundlage vorheriger Seitenbesucher}
+\label{sec:poly_recomm}
+Die übliche Volltextsuche lässt sich mathematisch als Funktion beschreiben, welche einem Suchbegriff -- welcher vom Benutzer eingegeben wird -- eine bestimmte Treffermenge zuordnet. Jedoch ist eine Suche nicht der einzig denkbare Weg, wie ein Nutzer  zu einer möglicherweise interessanten Veranstaltung gelangen kann: Auch eine Empfehlungs- oder Vorschlagsfunktion wäre denkbar. Von der grundlegenden Logik unterscheiden sich Suchtreffer und Empfehlung nicht: Während beim einen der Suchbegriff entscheidender Parameter ist, wird die Auswahl beim zweiten anhand der Identität des Benutzers oder dessen Verhalten gegenüber einzelnen Veranstaltungen getroffen \cite[S. 571]{Grainger.2014}.
+
+Es bleibt jedoch die Frage, auf welcher Grundlage Empfehlungen für den Nutzer ausgesprochen werden können. Hier hilft ein Blick zum Internethändler \emph{amazon.de} weiter: Ruft man die Detailansicht eines Artikels auf, so erscheint eine Auswahl weiterer Produkte unter der Überschrift \enquote{Kunden, die diesen Artikel gekauft haben, kauften auch}. Ähnlich könnte auch ReEvent Vorschläge auswählen. Angenommen ein Nutzer $X$ hat die Detailseiten zu den Veranstaltungen $\{A, B, C\}$ aufgerufen, und zuvor interessierten sich eine große Menge anderer Nutzer für die Veranstaltungen $\{A, B, C, D, E\}$, so könnten die Veranstaltungen $\{D, E\}$ auch für diesen Nutzer $X$ relevant sein.
+
+Folgende Abschnitte skizzieren eine Umsetzung eines Systems, welches derartige Vorschläge ermöglichen soll.
+
+\section{Identifizierung des Nutzers}
+\label{sec:poly_ident}
+
+ReEvents Veranstaltungen werden von Nutzern über das Web-Frontend abgerufen. Da das hierfür genutzte HTTP-Protokoll jedoch statuslos ist, fehlt dem Server der Zusammenhang zwischen mehreren, aufeinanderfolgenden Anfragen desselben Nutzers.
+
+Damit eine sinnvolle Empfehlung abgegeben werden kann, müssen mehrere Anfragen desselben Benutzers miteinander in Verbindung gebracht werden. Dies geschieht durch eine serverseitige Identifizierung des Benutzers. Eine Übersicht gängiger Lösungsansätze hierzu bietet Anhang \ref{ch:tracking}.
+
+
+
+\section{Graphdatenbank neo4j zur Speicherung}
+
+Immer wenn ein Benutzer eine Veranstaltung aufruft, wird diese Aktion abgespeichert. Hierfür sollte sowohl der Benutzer als auch die Veranstaltung möglichst eindeutig identifiziert werden. Auf Basis einer der Methoden aus Abschnitt \ref{sec:poly_ident} wird ein eindeutiger Schlüssel für den Nutzer generiert, beispielsweise ein Hash von durch Browser-Fingerprinting gefundene Merkmale. Da die Veranstaltungen in ReEvent eine eindeutige ID erhalten, kann diese hier wiederverwendet werden.
+
+Für die Speicherung in der NoSQL-Datenbank gelten folgende Anforderungen:
+
+\begin{itemize}
+	\item ist noch kein Benutzer mit der \texttt{ID\_user} vorhanden, so wird er angelegt
+	\item ist die besuchte Veranstaltung mit der \texttt{ID\_event} nicht vorhanden, so wird diese angelegt
+	\item anschließend werden beide Objekte durch eine Beziehung \texttt{VISITED} miteinander verknüpft
+\end{itemize}
+
+In einer relationalen Datenbank könnte man dies in drei Tabellen modellieren: Eine nimmt die Benutzer auf, eine zweite die Veranstaltungen und eine dritte die Seitenbesuche, welche Fremdschlüsselbeziehungen zu den ersten beiden enthält.
+
+Im Rahmen dieses Kapitels wird für die Persistenz die Graphdatenbank \emph{neo4j} ausgewählt. Laut \cite[S. 258f, S. 310]{Redmond.2012} eignen sich Graphdatenbanken insbesondere für stark verknüpfte Daten und Abfragen über mehrere Beziehungen hinweg. In einer relationalen Datenbank würde die Umsetzung der hier vorgestellten Anfragen viele verknüpfte \mintinline{sql}{JOIN}"=Anweisungen über dieselben Tabellen erfordern.
+
+Eine neo4j-Datenbank entspricht einem Graphen: Daten werden in \emph{nodes} abgespeichert, ein \emph{node} kann wiederum Schlüssel-Wert-Paare enthalten. Anschließend können zwei \emph{nodes} durch eine Beziehung verknüpft werden. Ein einfaches Beispiel für einen Graphen, welcher den hier beschriebenen Sachverhalt speichert, zeigt die Grafik \ref{img:user_visited_event}.
+
+\begin{figure}[ht!]
+\begin{margincap}
+	\centering
+	\begin{tikzpicture}[scale=.8,auto=left,font=\sffamily]
+		\node [vertex,minimum size=4em,] at (0,0) (s1){ID: 1};
+		\node [vertex,minimum size=4em,] at (3,4) (s2){ID: 3};
+		\node [vertex,minimum size=4em,] at (6,0) (e1){ID: 2};
+		\node [vertex,minimum size=4em,] at (8,4) (e2){ID: 4};
+
+		\draw [edge] (s1) -- (e1) node [midway, fill=white,below] {VISITED};
+		\draw [edge] (s2) -- (e1) node [midway, fill=white,] {VISITED};
+		\draw [edge] (s2) -- (e2) node [midway, fill=white,below] {VISITED};
+
+		\node [vertexlabel] at ([shift={(1.6,0.9)}]s1) {User};
+		\node [vertexlabel] at ([shift={(1.6,0.9)}]s2) {User};
+		\node [vertexlabel] at ([shift={(1.6,0.9)}]e1) {Event};
+		\node [vertexlabel] at ([shift={(1.6,0.9)}]e2) {Event};
+
+	\end{tikzpicture}
+	\caption{Beispiel eines Graphen in neo4j, Benutzer besuchen eine Veranstaltung}
+	\label{img:user_visited_event}
+\end{margincap}
+\end{figure}
+
+
+Für die Interaktion mit neo4j wird die Abfragesprache Cypher genutzt. Alternativ hierzu bietet neo4j eine Java- oder REST-Schnittstelle an, auch die auf Groovy basierende Abfragesprache Gremlin ist kompatibel \cite[S. 223]{Redmond.2012}. Listing \ref{lst:cypher_insert} zeigt die Eintragung von Benutzer, Veranstaltung und der \texttt{VISITED}-Beziehung zwischen beiden.
+
+\begin{listing}[ht!]
+\begin{minted}[breaklines=true]{cypher}
+MERGE (u:User {ID : 3})-[:VISITED]->(e:Event {ID : 4});
+\end{minted}
+\caption{Einfügen von Benutzer, Veranstaltung und \texttt{VISITED}-Beziehung}
+\label{lst:cypher_insert}
+\end{listing}
+
+% wird neo4j ausgewählt, da
+
+\section{Abfrage der Empfehlungen durch Cypher}
+
+Nachdem im vorhergehenden Abschnitt die Speicherung der Seitenbesuche dargestellt wurde, soll im Folgenden gezeigt werden wie für einen einzelnen Benutzer Empfehlungen abgegeben werden können. Wie bereits in Abschnitt \ref{sec:poly_recomm} dargestellt, besucht jeder Benutzer eine bestimmte Menge an Veranstaltungen. Jede dieser Veranstaltungen hat auch weitere Interessenten. Jeder einzelne dieser Interessenten hat -- wie auch schon der Benutzer, für den Empfehlungen ausgewählt werden sollen -- Veranstaltungen über das Frontend aufgerufen. Die folgende neo4j-Abfrage basiert auf der Idee, dass Veranstaltungen, die sehr häufig von Mitinteressenten aufgerufen worden sind auch für den primären Nutzer relevant sein könnten. Bezugnehmend auf die Abbildung \ref{img:user_visited_event} hat der User mit \texttt{ID:1} die Veranstaltung \texttt{ID:2} besucht. Diese wurde ebenfalls von Benutzer mit \texttt{ID:3} frequentiert, welcher sich auch für die Veranstaltung \texttt{ID:4} interessiert hat. Dementsprechend wird User \texttt{ID:1} die Veranstaltung \texttt{ID:4} empfohlen.
+
+
+\begin{listing}[ht!]
+\begin{margincap}
+\begin{minted}[breaklines=true]{cypher}
+MATCH
+    (me:User)-[:VISITED]->(e:Event)<-[:VISITED]-(somebody:User),
+    (somebody)-[:VISITED]->(other_event:Event)
+WHERE
+    me.ID = 1
+AND NOT
+    (me)-[:VISITED]->(other_event)
+RETURN
+    other_event.ID,
+    COUNT(other_event) AS weight
+ORDER BY
+    weight DESC
+LIMIT 5
+\end{minted}
+\caption{Abfrage von Vorschlägen für einen User mit der ID 1, die Anzahl der Vorschläge wird auf fünf begrenzt}
+\label{lst:cypher_recomm}
+\end{margincap}
+\end{listing}
+
+Der \mintinline{cypher}{MATCH}-Clause zu Beginn filtert die Veranstaltungen wie eben beschrieben. Nach \mintinline{cypher}{WHERE} wird der Startpunkt der Suche festgelegt, dies geschieht durch Eingrenzung über die Benutzer-ID. Zeile sieben verhindert, dass Veranstaltungen empfohlen werden, die der Benutzer bereits betrachtet hat. Anschließend wird die Veranstaltungs-ID zurückgegeben, aus welcher beispielsweise ein Link zur zugehörigen Seite im Frontend generiert werden kann. Entscheidender Faktor ist schließlich die Aggregats-Funktion \mintinline{cypher}{COUNT()}, welche die Anzahl von an Mitinteressenten für eine einzelne Veranstaltung zählt. Diese Summe wird als Entscheidungskriterium für die Auswahl der Empfehlungen verwendet: Per \mintinline{cypher}{ORDER BY} werden die Veranstaltungen nach diesem Gewicht absteigend sortiert, \mintinline{cypher}{LIMIT} begrenzt die maximale Anzahl an Vorschlägen auf fünf.
+
+\section{Erweiterung und Alternativen}
+
+Neben dem einfachen Ansatz, der soeben vorgestellt wurde, wären auch diverse Anpassungen denkbar, durch welche sich möglicherweise die Qualität der Empfehlungen verbessern ließe.
+
+Die \mintinline{cypher}{MERGE}-Anweisung aus Listing \ref{lst:cypher_insert} verhindert, dass zwischen einem Benutzer und einer Veranstaltung mehr als eine \texttt{VISITED}-Beziehung eingetragen werden kann. Ein Benutzer könnte eine Veranstaltung auch mehrfach aufrufen, was auf besonderes Interesse in Bezug auf diese Veranstaltung hindeutet. Würde man nun jeden einzelnen Aufruf dieser Veranstaltung abspeichern\footnote{hierzu müsste die Cypher"=Anweisung in Listing \ref{lst:cypher_insert} entsprechend angepasst werden}, könnte man zu jedem Seitenabruf den aktuellen Zeitstempel hinzufügen. Liegen zwischen einem Benutzer und einer Veranstaltung mehrere Beziehungen vor, könnte man dies stärker gewichten. Anhand des Alters der \texttt{VISITED}-Beziehung ließe sich zudem eine Straffunktion implementieren, sodass ältere Seitenaufrufe weniger stark ins Gewicht fallen.
+
+% ??? Verbessern, unverständlich
+Die Suche nach Veranstaltungen von Mitinteressenten ähnelt der Breitensuche in Graphen: Ausgehend von einem Startknoten(der Nutzer) werden zuerst Veranstaltungen gesucht, zu diesen wiederum Nutzer und ausgehend davon erneut Veranstaltungen. Theoretisch könnte man dies auch ausweiten. Jeder Veranstaltungsknoten, der als Vorschlag in Frage kommt, kann ebenfalls von weiteren Nutzern besucht worden sein -- welche selbst erneut mit Veranstaltungen verknüpft sind. Da diese jedoch weiter vom Startknoten entfernt sind, müssten diese ebenfalls geringer gewichtet werden.
+
+Laut \cite[S. 586-590]{Grainger.2014} lassen sich entsprechende Empfehlungen auch mit Apache Solr implementieren. Hierzu wird jedes Dokument mit einem Array aus Benutzer-IDs versehen, welche diese Veranstaltung bereits besucht haben. Im \emph{Inverted Index} wird diese Struktur wie in Abschnitt \ref{sec:market_solr} beschrieben zu einer Zuordnung von Benutzern zu Veranstaltungen umgekehrt. Darauf basierend lassen sich ähnliche Anfragen wie die hier vorgestellten effizient umsetzen.
+
+\section{Mögliche Nachteile des vorgestellten Ansatzes}
+
+Es sei angemerkt, dass in diesem Kapitel datenschutzrechtliche Aspekte teilweise ausgeklammert wurden. Sowohl Methoden des Browser-Fingerprinting als auch die Abspeicherung mehrerer aufeinanderfolgender Seitenzugriffe inklusive der Zuordnung zu einer -- wenn auch anonymen Person -- könnten die Persistierung personenbezogener Daten implizieren.
+
+Außerdem entsteht durch ein zusätzliches System -- in diesem Fall neo4j -- auch weiterer Wartungsaufwand, insbesondere bezüglich Updates und Konfiguration. Je mehr Systeme miteinander kommunizieren, desto fehleranfälliger könnte auch das Gesamtsystem werden: Die relative Wahrscheinlichkeit, dass ein notwendiges Teilsystem ausfällt, steigt an.
+

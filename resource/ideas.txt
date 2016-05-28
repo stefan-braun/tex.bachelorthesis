@@ -1,0 +1,19 @@
+- Anforderung: Mehrsprachigkeit
+- Übersetzung von Suchfragen
+- System muss mit Datenbank(Mehrsprachig) klarkommen
+- Relation von zeitlichen Abläufen:
+	Client -> Suchabfrage -> Server -> Suchsystem -> Aufbereitung der Resultate -> Antwort -> Rendering der Ergebnisse im Browser
+- Standard-Neos Suche abhängig von DB und Collation?
+
+
+Literatur
+- Wissenschaftliches Arbeiten
+- Anforderungsmanagement / Requirements Engineering
+- Lasttests, Performancetests allgemein durchführen
+
+Fragen
+- Formale Vorgaben (Seitenränder, Zeilenabstand, Umfang)
+- Literatur für Wissenschaftliches Arbeiten
+- Betreuer mit Hochschulabschluss
+- Anmelden der Bachelorarbeit
+- Zweitprüfer

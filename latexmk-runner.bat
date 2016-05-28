@@ -1,0 +1,1 @@
+latexmk -latexoption="-shell-escape" document

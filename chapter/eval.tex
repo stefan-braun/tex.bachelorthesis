@@ -1,0 +1,183 @@
+%!TEX root = ../document.tex
+\chapter{Evaluierung}
+\label{ch:eval}
+Ziel dieser Arbeit ist die Auswahl einer Suchmaschine, welche die Anforderungen aus Kapitel \ref{ch:requirements} erfüllt. Hierzu werden im Anhang \ref{ch:test_Definition} Tests und Kriterien definiert, auf welche die zuvor in Kapitel \ref{ch:choose} ausgewählten Suchmaschinen überprüft werden.
+
+\section{Aufstellung eines Bewertungsschemas}
+
+Um einen Vergleich mehrerer Suchmaschinen zu ermöglichen, muss ein wie auch immer geartetes Maß für die jeweilige Eignung der Suchmaschine gefunden werden. Dieses Maß setzt sich für eine Suchmaschine $s$ aus verschiedenen Auswahlkriterien zusammen. Ein Kriterium $a$ kann zu einem bestimmten Anteil $\alpha_{s,a} \in [0;1]$ den Anforderungen genügen. Da nicht jedes Kriterium für die Auswahl von gleicher Wichtigkeit sein muss, wird dieser Anteil mit einem multiplikativen Gewicht $\beta_{a} \in \mathbb{R}_0^+$ versehen. Die Gesamtbewertung $r_s$ einer Suchmaschine $s$ über alle Kriterien $A$ ergibt sich somit aus
+
+\begin{equation}
+	r_s = \sum_{a \in A} \alpha_{s,a} \cdot \beta_{a}
+\end{equation}
+
+Somit reduziert sich das Problem der Evaluation auf folgende Punkte:
+
+\begin{itemize}
+	\item Finden aller relevanten Kriterien $A$, welche in die Evaluation einbezogen werden sollen
+	\item Ermitteln eines Gewichtes $\beta_{a}$ für alle $a \in A$
+	\item Aufstellung eines Tests zur Ermittlung einer Bewertung $\alpha_{s,a} $ für alle $ a \in A$
+	\item Durchführung aller Tests und Bestimmung des Resultates
+\end{itemize}
+
+Es ergibt sich eine maximale Bewertung von
+
+\begin{equation}
+	\sum_{a \in A} \beta_{a}
+\end{equation}
+
+
+\section{Ein Überblick über die Testumgebung} % (fold)
+\label{sec:testumgebung}
+
+Die Tests finden auf einem Rechner mit folgenden Eckdaten statt:
+\begin{itemize}
+	\item Windows 8.1 64bit
+	\item 8 GB Arbeitsspeicher
+	\item Intel Core i5-3317U 1,70 GHz CPU
+	\item SanDisk SSD U100 128 GB
+	\item Internetanbindung per DSL\footnote{Median aus drei aufeinanderfolgenden Tests mit \url{http://www.wieistmeineip.de/speedtest/}} mit \numprint{6769}\,kbit/s Download und  \numprint{714}\,kbit/s Upload
+	\item Lucee 4.5 zur Ausführung der Tests (freie ColdFusion Implementierung)\footnote{Lucee stellt einen Fork des zu Beginn erwähnten Railo dar}
+	\item PostgreSQL 9.4.5
+	\item Apache Solr 5.4.0
+	\item Amazon CloudSearch API 2013-01-01
+\end{itemize}
+
+Wird nichts Gegenteiliges verlautet, so werden die Standardeinstellung nach der Installation oder Ersteinrichtung des Suchdienstes verwendet.
+
+% section testumgebung (end)
+
+\section{Herkunft der Testdaten} % (fold)
+\label{sec:testdaten}
+
+Zum aktuellen Zeitpunkt\footnote{Stand 29.12.2015} befindet sich ReEvent noch in der Entwicklung. Insbesondere der Teil, der Veranstaltungen aufnehmen und verwalten kann, ist derzeit noch nicht fertiggestellt. An ein noch nicht fertiggestelltes System kann allerdings auch keine direkte Anbindung zur Indizierung oder Abfrage von Suchergebnissen entwickelt werden. Dementsprechend werden im Folgenden Testdaten verwendet, die per Hand angelegt wurden oder aus der INsite-Datenbank stammen und dem geplanten Modell von ReEvent nahe kommen sollen.
+
+% section testdaten (end)
+
+\section{Definition des Kriterienkataloges} % (fold)
+\label{sec:kriterienkatalog}
+
+Jede einzelne Suchmaschine, die im Kapitel \ref{ch:choose} ausgewählt wurde, wird nach mehreren Kriterien auf ihre Tauglichkeit hin überprüft. Hierzu soll ein \emph{Kriterienkatalog} aufgestellt werden. Wie bereits eingangs erwähnt, entstammen die Kriterien dem Requirements Engineering in Kapitel \ref{ch:requirements}.
+
+Für jedes einzelne Kriterium $a$ wird eine Beschreibung hinterlegt und ein Testablauf definiert. Das Testergebnis muss anschließend in eine Note $\alpha_{s,a} \in [0;1]$ überführt werden. Letzter festzulegender Parameter ist das Gewicht $\beta_{a} \in \mathbb{R}_0^+$, welches sowohl relativ zu anderen als auch in Bezug auf die Einordnung der Anforderung hinsichtlich dem Abschnitt \ref{sec:require.classes} gewählt wird. Die Gewichtung der Einzelnoten $\beta_{a}$ hat einen starken Einfluss auf den Ausgang der Gesamtbewertung. Entsprechend minutiös muss der Wert hierfür gewählt werden.
+
+Bei einigen Anforderungen stellte sich heraus, dass sie nicht direkt vom Suchsystem selbst sondern von der Anbindung dessen an ReEvent abhängig sind. Hierunter fallen unter anderem die lokalisierbare Suchmaske oder die automatische Aktualisierung der Trefferliste bei Änderung des Suchbegriffes beispielsweise durch AJAX.
+
+%TODO überarbeiten, klarer machen
+Die Bewertung mancher filterbasierter Tests gestaltet sich in Hinblick auf SQL-basierte Suchen schwierig: Mit entsprechenden Aufwand könnte möglicherweise jede dieser Aufgaben über SQL abgebildet werden. Daher wird festgelegt, dass ein Test bezüglich einer Filterung erfolgreich ist, wenn er innerhalb einer Abfrage unter vertretbarem Aufwand mit Standardfunktionen von SQL durchgeführt werden kann. Beispielsweise könnte die Umkreissuche theoretisch umgesetzt werden\footnote{PostgreSQL bietet hierfür die Erweiterung \emph{earthdistance} an, \url{http://www.postgresql.org/docs/9.4/static/earthdistance.html} oder auch PostGIS \url{http://postgis.net/}}, eine Filterung nach Datum ist mit gängigen Vergleichen wie \mintinline{SQL}{BETWEEN} verhältnismäßig einfach.
+
+
+% section kriterienkatalog (end)
+
+\section{Über die Qualität einer Volltextsuche}
+Neben der Vielfalt an Filtern und sonstigen Funktionen, die im Kriterienkatalog definiert werden, ist die bloße Volltextsuche wichtigste Aufgabe des Suchsystems -- was sich auch in der Gewichtung der zugehörigen Tests widerspiegeln soll. Es verbleibt jedoch die Frage, wie sich die Qualität einer Suchmaschine messen lässt. Hierzu sollen die folgenden zwei Aspekte betrachtet werden.
+
+\subsection{Effektivität}
+\label{sec:eval:effectivity}
+
+Primärer Zweck einer Volltextsuche ist die Auffindung gewünschter Dokumente, welche zur Suchanfrage passen sollen. Zur Bewertung dieser wird hier das Modell von \emph{Recall} und \emph{Precision} verwendet.
+
+Entscheidend für die Bewertung sind zwei Mengen von Dokumenten: die Trefferliste $T$ für eine Suchanfrage sowie die für diese Suchanfrage relevanten Dokumente $R$.
+
+\begin{equation}
+	recall = \frac{|T \cap R|}{|R|} ~~~~~ precision = \frac{|T \cap R|}{|T|}
+\end{equation}
+
+Precision entspricht dem Anteil relevanter Dokumente innerhalb der Trefferliste, Recall berechnet den Prozentsatz der gefunden, relevanten Dokumente insgesamt. Eine qualitativ hochwertige Volltextsuche zeichnen sowohl hohe Werte für Recall als auch für Precision aus -- beide Werte sind nur im Zusammenhang aussagekräftig. Beispielsweise könnte eine Suchmaschine unabhängig von der Suchanfrage alle Dokumente zurückliefern: Recall hätte somit einen Wert von 1\footnote{Recall wäre somit maximal}, die Precision würde allerdings maßgeblich abfallen \cite[S. 407]{Buttcher.2010}. Beide werden im sogenannten \emph{F-Maß} kombiniert, welches das harmonische Mittel von Recall und Precision berechnet \cite[S. 68]{Belaid.2015}.
+
+\begin{equation}
+	F = \frac{2 \cdot recall \cdot precision}{recall + precision}
+\end{equation}
+
+Das F-Maß wird im zugehörigen Test im Anhang \ref{ch:test_Definition} als Kriterium für die Effektivität festgelegt.
+
+Das Problem dieser Metriken ist, dass die vorherige Einordnung der Dokumente in Bezug auf Relevanz zu einer Suchanfrage nur manuell durchgeführt werden kann und diese mit einem hohen zeitlichen Aufwand verbunden ist. Entsprechend muss die Anzahl der durchsuchten Dokumente reduziert werden.
+
+\subsection{Effizienz}
+\label{sec:eval_effizienz}
+
+Während die Effektivität die Qualität der Suchergebnisse misst, erfasst die Effizienz den \emph{Durchsatz} und die \emph{Latenz} von Anfragen. Durchsatz wird hierbei als Menge von Suchanfragen definiert, die ein Suchsystem pro Zeiteinheit abarbeiten kann. Die Latenz gibt die Dauer einer einzelnen Suchanfrage an und kann -- in Abhängigkeit von der Definition -- auch die Netzwerklatenz beinhalten \cite[S. 470]{Buttcher.2010}.
+
+Auf den ersten Blick könnte es als müßig erscheinen, beide zu bestimmen. Der Durchsatz ist allerdings nicht notwendigerweise der Kehrwert der Latenz: Aufgrund von Queuing von Anfragen kann sich die Latenz unter Last stark erhöhen. Andererseits steigt der Durchsatz, falls das Suchsystem in der Lage ist, mehrere Suchanfragen parallel abzuarbeiten \cite[S. 471]{Buttcher.2010}. Während der Durchsatz in erster Linie aus Serversicht interessant ist -- Stichwort Skalierung -- ist die Latenz entscheidend für die Benutzerzufriedenheit. Insbesondere verhältnismäßig hohe Latenzwerte können sich störend auf die User Experience auswirken \cite[S. 472]{Buttcher.2010}.
+
+\section{Anmerkungen zu einzelnen Tests} % (fold)
+\label{sec:anmerkungen_zu_einzelnen_tests}
+
+Die Tests, die lediglich überprüfen, ob eine bestimmte Funktionalität vorhanden ist, beziehen sich unter anderem auf folgende Dokumentationen.
+\begin{itemize}
+	\item \url{http://www.postgresql.org/docs/9.4/static/textsearch.html}
+	\item \url{http://mirror2.shellbot.com/apache/lucene/solr/ref-guide}
+	\item \url{http://docs.aws.amazon.com/cloudsearch/latest/developerguide/cloudsearch-dg.pdf}
+\end{itemize}
+
+
+Suchanfragen über Apache Solr oder Amazon CloudSearch beziehen sich immer auf den \emph{edismax-} oder \emph{dismax-}Modus. Der gewählte Suchmodus entscheidet unter anderem darüber, wie die angegebene Suchanfrage abgearbeitet wird. \emph{dismax} soll es erlauben, Benutzereingaben direkt entgegenzunehmen, ohne Syntaxfehler befürchten zu müssen. Dadurch ist dieser Suchmodus prädestiniert für eine Sucheingabe über ein einfaches, clientseitiges Textfeld \cite[S. 222f]{Grainger.2014}.
+
+Eine Ausnahme hiervon stellt der Test bezüglich Rechtschreibfehler bei Amazon CloudSearch dar: Er erfolgte über die \enquote{suggest}-Schnittstelle des Webservices. Diese berechnet letztendlich eine Levenshtein-Distanz und überprüft, ob diese kleiner zwei ist. Auch Apache Solr wurde entsprechend konfiguriert und nutzte bei diesem Test Levenshtein \cite[S. 315]{Grainger.2014}. Welche maximale Distanz Solr an dieser Stelle verwendet hat, ist nicht bekannt.
+
+\subsection{Indizierung bei SQL-basierter Suche}
+\label{sec:eval_indices}
+
+Auch für die SQL-basierte Suche kann es sinnvoll sein, einen Datenbankindex anzulegen. Ziel dessen ist es, eine Beschleunigung der Suchvorgänge zu erreichen. Für die Volltextsuche bietet PostgreSQL hier die Varianten GIN und GiST an. GIN-Indizes erlauben im Vergleich zu GiST eine schnellere Suche, allerdings einhergehend mit einer langsameren Indizierungsvorgang und höheren Speicheranforderungen \cite{ThePostgreSQLGlobalDevelopmentGroup.2016}.
+
+In den Tests wurde zuerst sowohl für die Trigramm-Suche als auch für die PostgreSQL-Volltextsuche ein Index vom Typ GIN\footnote{General Inverted Index} angelegt. Unter PostgreSQL kann durch Voranstellung des Schlüsselwortes \mintinline{sql}{EXPLAIN} überprüft werden, ob ein erstellter Index in einer Anfrage genutzt wird. Die Query returniert so eine Spalte namens \texttt{QUERY PLAN}, deren Einträge einzelne Schritte zur Ausführung der Abfrage enthalten.
+
+
+\begin{listing}[ht]
+\begin{minted}{sql}
+EXPLAIN SELECT * FROM event WHERE venue % 'Suchbegriff'
+\end{minted}
+\caption{\mintinline{sql}{EXPLAIN} bei Trigramm-basierter Suche}
+\label{lst:ngram_postgresql_explain}
+\end{listing}
+
+Obige Anfrage an eine mit einem GIN"=Index versehene Tabelle gibt unter anderem \texttt{Bitmap Index Scan on idx\_trgm\_v[...]} aus und deutet somit darauf hin, dass der entsprechende Index \texttt{idx\_trgm\_v} genutzt wurde. Der \mintinline{sql}{EXPLAIN} Befehl weißt bei den für die Tests verwendeten Anfragen aus den Listings \ref{lst:fulltext_postgresql} und \ref{lst:ngram_postgresql} darauf hin, dass keine Indizes genutzt werden. Dies kann zwei mögliche Ursachen haben: Entweder ist die Anfrage selbst fehlerhaft und verhindert die Nutzung eines Index oder aber PostgreSQL entscheidet, dass Indizes für diese Anfrage nicht genutzt werden sollen, da die Query ohne Index schneller abgearbeitet werden könnte. Möglicherweise wird ein Index erst bei größeren Datenmengen relevant als sie hier verwendet wurden. Entsprechend wurde für Trigramm"=Vergleich und PostgreSQL"=basierter Volltextsuche kein Index eingerichtet.
+
+Bei \mintinline{sql}{LIKE} wäre ein Datenbankindex üblicherweise nur sinnvoll, wenn der Vergleich nicht mit einem Wildcard-Operator beginnen würde. Was PostgreSQL in diesem Punkt von anderen Datenbanken unterscheidet, ist die Möglichkeit Trigramm"=basierte Indizes für Suchanfragen wie \mintinline{sql}{LIKE '%Suchbegriff%'} zu nutzen. Hierbei werden Trigramme vom Suchbegriff erstellt und im Index nachgeschlagen \cite{ThePostgreSQLGlobalDevelopmentGroup.2016b}. Tests ergaben, dass sich so der Durchsatz nach Test \#2 nahezu verdoppelt. Interessanterweise gilt dies jedoch auch für die gemessene Latenz aus Testkriterium \#3. Zusammen mit der geringeren Bewertung für die Indizierungsgeschwindigkeit wäre die Gesamtnote insgesamt schlechter ausgefallen, daher wurde der entsprechende Testlauf ohne Trigramm"=Index durchgeführt.
+
+Für die Nutzung von Trigrammen muss ein PostgreSQL"=Modul wie folgt aktiviert werden.
+\begin{listing}[ht]
+\begin{minted}{sql}
+CREATE EXTENSION pg_trgm;
+\end{minted}
+\caption{Aktivierung von Trigrammen unter PostgreSQL für eine Datenbank}
+\label{lst:postgresql_activate_trgm}
+\end{listing}
+
+Ähnlich wie die vergleichbaren Batch"=Anweisungen bei Apache Solr und Amazon CloudSearch wurden bei der Geschwindigkeitsmessung der Indizierung alle Datensätze in einer \mintinline{sql}{INSERT}-Anweisung übertragen.\footnote{sogenanntes \emph{multi-row insert}}
+% section anmerkungen_zu_einzelnen_tests (end)
+
+\subsection{Kostenkalkulation für Amazon CloudSearch}
+\label{sec:costs_amazon}
+
+Der Test \#11 erfordert die Schätzung jährlicher Kosten bei der Nutzung eines Suchsystems. Lediglich für das cloudbasierte Angebot von Amazon ist kostenpflichtig und muss daher einer Kostenkalkulation unterzogen werden.
+
+Die jährlichen Kosten von Amazon CloudSearch sind von folgenden Faktoren abhängig: Nutzungsdauer des Dienstes gemessen in begonnenen Stunden, Menge der Indizierungsanforderungen und der ausgehende Datenverkehr. Die Testdefinition in Anhang \ref{ch:test_Definition} gibt hierfür \numprint{4540} Suchanfragen und über \numprint{3600} Veranstaltungen zu je 1,13 KB an. Zuerst wird abgeschätzt, wie viele Stunden der Dienst genutzt werden würde. Hierfür wird einmal mehr das Webserverlog aus Abschnitt \ref{sec:requirements_insite} herangezogen. Eine weitere Auswertung dessen ergab, dass die \numprint{2632} Suchanfragen innerhalb von \numprint{1136} Stunden getätigt wurden. Dies erlaubt eine Hochrechnung für die Testkriterien.
+
+\begin{equation}
+	\frac{4540}{2632} \cdot 1163 h \approx 2006 h
+\end{equation}
+
+Im Folgenden wird angenommen, dass hierfür keine Skalierung erforderlich ist und zu jedem Zeitpunkt die kleinste Instanz\footnote{\enquote{search.m3.medium}} ausreichend ist. Ebenfalls würde jede Suchanfrage im Schnitt $v$ Veranstaltungen zurückliefern und jede einzelne Veranstaltung wird $i$ mal indiziert, so ergibt sich die Summe zu:
+
+\begin{align}
+	2006h \cdot 0,112 \$ + 0,10 \$ \cdot i \frac{3600}{1000} + 4540 \cdot v \cdot 1,13 KB \frac{0,09 \$}{10^5 KB} \approx \\
+	224,67 \$ + 0,36 \$ \cdot i + 0,04 \$ \cdot v
+\end{align}
+
+Anhand der Teilbeträge für Datenübertragung und Indizierung wird ersichtlich, dass diese unabhängig von den Faktoren $i$ und $v$ kaum ins Gewicht fallen. Hauptaugenmerk gilt der Gebühr für die Nutzungsdauer. Eine Umrechnung mit aktuellen Wechselkurs\footnote{ $1,0861 \$$ pro €, Stand 03.01.2016 } ergibt einen Wert von \numprint{206,86} €.
+
+Es sei jedoch angemerkt, dass die Nutzung von Autovervollständigung mit einer Vielzahl zusätzlicher Suchanfragen einhergehen würde. Entsprechend müsste der Faktor $v$ deutlich nach oben korrigiert werden, was wiederum zu einem Anstieg der Gesamtsumme führen würde.
+
+\section{Quellen für Testfehler}
+
+Die in Anhang \ref{ch:test_Definition} aufgeführten Tests bergen jedoch auch Fehlerpotential, wodurch das Testergebnis möglicherweise verfälscht werden könnte. Ein kritischer Punkt hierbei sind die Testdaten, welche einerseits nicht aus dem Zielsystem ReEvent stammen und andererseits in ihrem Umfang beschränkt sind. \cite[S. 443]{Buttcher.2010} weist auf Testdatenbanken für Messungen der Effektivität mit einem Umfang von \numprint{500000} Dokumenten hin -- um ein Vielfaches mehr als die hier verwendeten 30. Ein weiterer Einschnitt hinsichtlich ReEvent: Sobald eine externe Suchmaschine wie Solr verwendet wird, muss für dieses ein Importskript entwickelt werden, um die Daten aus der ReEvent"=Datenbank in die Suchmaschine zu überführen. Auch bei der Suche wird nicht direkt die Schnittstelle der jeweiligen Suchmaschine verwendet, es wird zudem PHP"=Code seitens ReEvent ausgeführt. In den Tests wurde allerdings meist direkt eine (REST-)Schnittstelle des jeweiligen Suchsystems aufgerufen. Je nach Implementierung der Skripte für Import und Suche könnte beispielsweise die Effizienz variieren.
+
+
+Insbesondere bei Tests, die die Effizienz\footnote{vergleiche Abschnitt \ref{sec:eval_effizienz}} betreffen, muss bedacht werden, dass die Tests nicht auf einem Produktivserver der Stadt Ingolstadt durchgeführt wurden.
+
+Kritik muss auch daran geübt werden, dass sowohl Testskript als auch Suchmaschine in den meisten Fällen am selben Rechner installiert waren. Dies kann unter Last dazu führen, dass beide Anwendungen um Systemressourcen konkurrieren und somit das Testergebnis verfälscht wird.
+
+Schlussendlich können für einzelne Suchmaschinen auch Erweiterungen oder Konfigurationen existieren, durch welche die hier geschilderten Anforderungen besser bewältigt werden. Wie bereits in Abschnitt \ref{sec:testumgebung} erwähnt, wird stets eine unveränderte Installation eines Suchsystems getestet, falls nichts anderes angegeben wurde.
+
+

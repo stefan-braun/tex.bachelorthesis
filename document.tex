@@ -1,0 +1,45 @@
+%&document
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%         Config          %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{config/common.tex}
+\input{config/references.tex}
+\input{config/listings.tex}
+\input{config/graphics.tex}
+\input{config/math.tex}
+% \input{config/pagestyle.tex}
+\input{config/tabular.tex}
+\input{chapter/title.tex}
+\input{config/makro.tex}
+
+\csname endofdump\endcsname
+
+\input{config/glossaries.tex}
+\input{config/development.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%         CONTENT         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\KOMAoptions{DIV=12}
+
+\begin{document}
+%\svnInfo $Id: document.tex 152 2016-01-19 21:45:07Z sbraun $
+
+\pagenumbering{roman}
+\pagestyle{plain}
+\include{chapter/first_pages}
+\include{chapter/preface}
+\pagestyle{scrheadings}
+\pagenumbering{arabic}
+\include{chapter/introduction}
+\include{chapter/reevent}
+\include{chapter/requirements}
+\include{chapter/market}
+\include{chapter/polyglott}
+\include{chapter/choose}
+\include{chapter/eval}
+\include{chapter/conclusion}
+\include{chapter/last_pages}
+
+\end{document}
